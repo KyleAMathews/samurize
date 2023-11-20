@@ -24,20 +24,21 @@ export default async function initElectric() {
   // Start syncing but don't block rendering the app on it.
   new Promise(async () => {
     try {
-      const [shape, contactsShape, favoritesShape] = await Promise.all([
+      const [shape1, shape2, shape3, shape4] = await Promise.all([
         electric.db.trpc_calls.sync(),
-        electric.db.contacts.sync(),
-        electric.db.favorite_contacts.sync({
+        electric.db.youtube_videos.sync(),
+        electric.db.youtube_basic_summary.sync({
           include: {
-            contacts: true,
+            youtube_videos: true,
+          },
+        }),
+        electric.db.youtube_llm_outputs.sync({
+          include: {
+            youtube_videos: true,
           },
         }),
       ])
-      await Promise.all([
-        shape.synced,
-        contactsShape.synced,
-        favoritesShape.synced,
-      ])
+      await Promise.all([shape1.synced, shape2.synced, shape3.synced, shape4])
 
       await new Promise((resolve) => setTimeout(resolve, 1000))
       console.timeEnd(`sync`)

@@ -4,15 +4,66 @@ import "./index.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import ErrorPage from "./error-page"
 import initElectric from "./init-electric"
-import Index from "./routes/index"
 import { ElectricalProvider } from "./context"
 import { electricRef } from "./trpc"
+import CssBaseline from "@mui/material/CssBaseline"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import * as typographyStyles from "./utils/typography"
 
-// Start example routes
+import "@fontsource/source-sans-pro"
+import "@fontsource/rokkitt"
+
+const styles = {}
+for (const key in typographyStyles) {
+  // if (typographyStyles.hasOwnProperty(key)) {
+  console.log({ key, value: typographyStyles[key] })
+  const value = typographyStyles[key]
+  if (key === `h2`) {
+    styles[key] = {
+      ...value,
+      color: `hsla(176, 98%, 30%, 1)`,
+      fontWeight: 700,
+      fontFamily: [
+        `Rokkitt`,
+        `-apple-system`,
+        `BlinkMacSystemFont`,
+        `"Segoe UI"`,
+        `"Helvetica Neue"`,
+        `Arial`,
+        `sans-serif`,
+        `"Apple Color Emoji"`,
+        `"Segoe UI Emoji"`,
+        `"Segoe UI Symbol"`,
+      ].join(`,`),
+    }
+  } else {
+    styles[key] = value
+  }
+}
+console.log({ typographyStyles, styles })
+const theme = createTheme({
+  spacing: 9,
+  typography: {
+    fontFamily: [
+      `Source Sans Pro`,
+      `-apple-system`,
+      `BlinkMacSystemFont`,
+      `"Segoe UI"`,
+      `"Helvetica Neue"`,
+      `Arial`,
+      `sans-serif`,
+      `"Apple Color Emoji"`,
+      `"Segoe UI Emoji"`,
+      `"Segoe UI Symbol"`,
+    ].join(`,`),
+    fontSize: 18,
+    ...styles,
+  },
+})
+
+// Routes
 import Root from "./routes/root"
-import Contact from "./routes/contact"
-import EditContact from "./routes/edit"
-// End eample routes
+import Video from "./routes/video"
 
 const router = createBrowserRouter([
   {
@@ -21,16 +72,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <Index />,
-      },
-      {
-        path: `contacts/:contactId`,
-        element: <Contact />,
-      },
-      {
-        path: `contacts/:contactId/edit`,
-        element: <EditContact />,
+        path: `/video/:videoId`,
+        element: <Video />,
       },
     ],
   },
@@ -41,9 +84,12 @@ async function render() {
   electricRef.value = electric
   ReactDOM.createRoot(document.getElementById(`root`)!).render(
     <React.StrictMode>
-      <ElectricalProvider db={electric}>
-        <RouterProvider router={router} />
-      </ElectricalProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ElectricalProvider db={electric}>
+          <RouterProvider router={router} />
+        </ElectricalProvider>
+      </ThemeProvider>
     </React.StrictMode>
   )
 }

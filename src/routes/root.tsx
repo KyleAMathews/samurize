@@ -1,89 +1,71 @@
-import { useState } from "react"
-import { Outlet, useSearchParams, useNavigate, NavLink } from "react-router-dom"
-import { useElectric } from "../context"
-import { useContacts, createContact } from "../daos/contacts"
+import { useVideos, useCreateYoutubeVideo } from "../daos/youtube_videos"
+import { Link, Outlet, useNavigate } from "react-router-dom"
+import Button from "@mui/material/Button"
+import Typography from "@mui/material/Typography"
+import Stack from "@mui/material/Stack"
+// import Box from "@mui/material/Box"
+import TextField from "@mui/material/TextField"
+import Divider from "@mui/material/Divider"
+import { trpc } from "../trpc"
 
 export default function Root() {
-  const url = new URL(window.location.href)
-  const qUrl = url.searchParams.get(`q`)
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [q, setQ] = useState(qUrl)
-  const contacts = useContacts(q)
-  const { db } = useElectric()!
+  const createVideo = useCreateYoutubeVideo()
+  const videos = useVideos()
   const navigate = useNavigate()
 
-  if (contacts === undefined) {
+  if (videos === undefined) {
     return null
   }
+
+  console.log(`render root`)
   return (
-    <>
-      <div id="sidebar">
-        <h1>ElectricSQL Contacts</h1>
-        <div>
-          <form id="search-form" role="search">
-            <input
-              id="q"
-              aria-label="Search contacts"
-              placeholder="Search"
-              type="search"
-              name="q"
-              value={q || ``}
-              onChange={(event) => {
-                const formData = new FormData(event.currentTarget.form)
-                const updates = Object.fromEntries(formData)
-                setSearchParams({ q: updates.q }, { replace: true })
-                setQ(updates.q)
-              }}
-            />
-            <div id="search-spinner" aria-hidden hidden={true} />
-            <div className="sr-only" aria-live="polite"></div>
-          </form>
+    <Stack p={2} divider={<Divider />} maxWidth={960} margin="auto">
+      <Typography variant="h1" textAlign="center" fontWeight="700" pb={2}>
+        Samurize
+      </Typography>
+      <Stack
+        divider={<Divider orientation="vertical" flexItem />}
+        direction="row"
+        spacing={4}
+        mt={3}
+      >
+        <Stack spacing={1} flex={`0 0 300px`}>
           <form
-            method="post"
-            onSubmit={async (event) => {
-              event.preventDefault()
-              const newContact = await createContact(db)
-              navigate(`/contacts/${newContact.id}/edit`)
+            onSubmit={async (e) => {
+              e.preventDefault()
+              const form = e.currentTarget
+              const formData = new FormData(form)
+              const data = Object.fromEntries(formData)
+              const id = await createVideo(data.youtube_url)
+              navigate(`/video/${id}`)
+              await trpc.youtubeBasicSummary.mutate({ id })
+              form.reset()
             }}
           >
-            <button type="submit">New</button>
+            <Stack spacing={1} mb={3}>
+              <TextField
+                required
+                name="youtube_url"
+                placeholder="YouTube url"
+              />
+              <Button variant="outlined" type="submit">
+                Add video
+              </Button>
+            </Stack>
           </form>
-        </div>
-        <nav>
-          <h2>Contacts ({contacts?.length || 0})</h2>
-          {contacts.length ? (
-            <ul>
-              {contacts.map((contact) => (
-                <li key={contact.id}>
-                  <NavLink
-                    to={`contacts/${contact.id}`}
-                    className={({ isActive, isPending }) =>
-                      isActive ? `active` : isPending ? `pending` : ``
-                    }
-                  >
-                    {contact.first_name || contact.last_name ? (
-                      <>
-                        {contact.first_name} {contact.last_name}
-                      </>
-                    ) : (
-                      <i>No Name</i>
-                    )}
-                    {` `}
-                    {!!contact.is_favorited && <span>★</span>}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>
-              <i>No contacts</i>
-            </p>
-          )}
-        </nav>
-      </div>
-      <div id="detail">
+
+          <Stack spacing={1}>
+            {videos.map((video) => {
+              return (
+                <div key={video.id}>
+                  <Link to={`/video/${video.id}`}>{video.title}</Link>
+                </div>
+              )
+            })}
+          </Stack>
+        </Stack>
         <Outlet />
-      </div>
-    </>
+      </Stack>
+    </Stack>
   )
 }

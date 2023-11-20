@@ -1,4 +1,4 @@
-import type { AppRouter } from "../backend"
+import type { AppRouter } from "./backend"
 import { link, createElectricRef } from "trpc-electric-sql/link"
 import { createTRPCProxyClient, loggerLink } from "@trpc/client"
 import { Electric } from "../src/generated/client"
@@ -16,4 +16,4 @@ export const trpc = createTRPCProxyClient<AppRouter>({
   ],
 })
 
-window.trpc = trpc
+// window.trpc = trpc
