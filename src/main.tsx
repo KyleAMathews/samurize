@@ -9,6 +9,7 @@ import { electricRef } from "./trpc"
 import CssBaseline from "@mui/material/CssBaseline"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import * as typographyStyles from "./utils/typography"
+import { HelmetProvider } from "react-helmet-async"
 
 import "@fontsource/source-sans-pro"
 import "@fontsource/rokkitt"
@@ -99,10 +100,12 @@ async function render() {
   ReactDOM.createRoot(document.getElementById(`root`)!).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ElectricalProvider db={electric}>
-          <RouterProvider router={router} />
-        </ElectricalProvider>
+        <HelmetProvider>
+          <CssBaseline />
+          <ElectricalProvider db={electric}>
+            <RouterProvider router={router} />
+          </ElectricalProvider>
+        </HelmetProvider>
       </ThemeProvider>
     </React.StrictMode>
   )

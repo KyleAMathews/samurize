@@ -8,6 +8,7 @@ import MLink from "@mui/material/Link"
 import Button from "@mui/material/Button"
 import { trpc } from "../trpc"
 import { Markdown } from "../components/markdown"
+import { Helmet } from "react-helmet-async"
 
 function Summary({ hourSummaries }) {
   console.log(hourSummaries)
@@ -52,6 +53,9 @@ export default function Video() {
 
   return (
     <Stack p={3} maxWidth={600} margin="auto">
+      <Helmet>
+        <title>{video.title} | Samurize</title>
+      </Helmet>
       <Typography variant="h1" mb={1}>
         {video.title}
       </Typography>

@@ -2,9 +2,9 @@ import { useVideos, useCreateYoutubeVideo } from "../daos/youtube_videos"
 import { Link, useNavigate } from "react-router-dom"
 import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
-import Label from "@mui/material/FormLabel"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
+import { Helmet } from "react-helmet-async"
 import { trpc } from "../trpc"
 
 export default function Index() {
@@ -18,6 +18,9 @@ export default function Index() {
 
   return (
     <Stack spacing={1} p={3} maxWidth={600} margin="auto">
+      <Helmet>
+        <title>Samurize</title>
+      </Helmet>
       <form
         onSubmit={async (e) => {
           e.preventDefault()
