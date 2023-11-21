@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client"
 import "./index.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import ErrorPage from "./error-page"
-import initElectric from "./init-electric"
+import { initElectric, areTablesSynced } from "./init-electric"
 import { ElectricalProvider } from "./context"
 import { electricRef } from "./trpc"
 import CssBaseline from "@mui/material/CssBaseline"
@@ -80,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: `/video/:videoId`,
         element: <Video />,
+        loader: async () => {
+          await areTablesSynced([`youtube_videos`])
+          return null
+        },
       },
       {
         path: `/prompt-playground`,

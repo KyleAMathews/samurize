@@ -4,7 +4,46 @@ import { authToken } from "./auth"
 import sqliteWasm from "wa-sqlite/dist/wa-sqlite-async.wasm?asset"
 import { Electric, schema } from "./generated/client"
 
-export default async function initElectric() {
+class PromiseTracker {
+    private promises: Map<string, Promise<any>>;
+    private waitingResolvers: Map<string, (p: Promise<any> | true) => void>;
+
+    constructor() {
+        this.promises = new Map();
+        this.waitingResolvers = new Map();
+    }
+
+    addPromise(key: string, promise: Promise<any>): void {
+        this.promises.set(key, promise);
+
+        promise.then(() => {
+            if (this.waitingResolvers.has(key)) {
+                this.waitingResolvers.get(key)(true);
+                this.waitingResolvers.delete(key);
+            }
+        });
+
+        if (this.waitingResolvers.has(key)) {
+            this.waitingResolvers.get(key)(promise);
+            this.waitingResolvers.delete(key);
+        }
+    }
+
+    checkPromise(key: string): Promise<true | Promise<any>> {
+        if (this.promises.has(key)) {
+            const promise = this.promises.get(key);
+            return Promise.resolve(promise);
+        } else {
+            return new Promise(resolve => {
+                this.waitingResolvers.set(key, resolve);
+            });
+        }
+    }
+}
+
+const tracker = new PromiseTracker();
+
+export async function initElectric() {
   const token = authToken()
   const config = {
     auth: {
@@ -38,7 +77,13 @@ export default async function initElectric() {
           },
         }),
       ])
-      await Promise.all([shape1.synced, shape2.synced, shape3.synced, shape4])
+
+      tracker.addPromise('trpc_calls', shape1.synced);
+      tracker.addPromise('youtube_videos', shape2.synced);
+      tracker.addPromise('youtube_basic_summary', shape3.synced);
+      tracker.addPromise('youtube_llm_outputs', shape4.synced);
+
+      await Promise.all([shape1.synced, shape2.synced, shape3.synced, shape4.synced])
 
       await new Promise((resolve) => setTimeout(resolve, 1000))
       console.timeEnd(`sync`)
@@ -48,4 +93,8 @@ export default async function initElectric() {
   })
 
   return electric
+}
+
+export async function areTablesSynced(tables: string[]) {
+  return Promise.all(tables.map(table => tracker.checkPromise(table)))
 }
