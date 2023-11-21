@@ -40,13 +40,16 @@ function WhyWatchVideo({ outputs }) {
 export default function Video() {
   const { videoId } = useParams()
   const [video, summaries, outputs] = useVideo(videoId)
-  console.log({ video, outputs })
 
-  if (video === undefined || summaries === undefined || outputs === undefined) {
+  if (
+    videoId === undefined ||
+    video === undefined ||
+    summaries === undefined ||
+    outputs === undefined
+  ) {
     return null
   }
 
-  console.log({ summaries })
   return (
     <Stack p={3} maxWidth={600} margin="auto">
       <Typography variant="h1" mb={1}>

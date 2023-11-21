@@ -4,10 +4,17 @@ import getYoutubeId from "get-youtube-id"
 import { trpc } from "../trpc"
 
 export function useCreateYoutubeVideo() {
+  const { db } = useElectric()!
   return async (url) => {
     const id = getYoutubeId(url)
     if (id) {
-      await trpc.createVideo.mutate({ id })
+      // Check if the video exists.
+      const videoExists = await db.youtube_videos.findUnique({ where: { id } })
+      if (videoExists === null) {
+        await trpc.createVideo.mutate({ id })
+      } else {
+        return id
+      }
     }
 
     return id
