@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import MLink from "@mui/material/Link"
 import Button from "@mui/material/Button"
+import Box from "@mui/material/Box"
 import { trpc } from "../trpc"
 import { Markdown } from "../components/markdown"
 import { Helmet } from "react-helmet-async"
@@ -59,9 +60,13 @@ export default function Video() {
       <Typography variant="h1" mb={1}>
         {video.title}
       </Typography>
-      <MLink mb={2} href={video.author_url}>
-        {video.author_name}
-      </MLink>
+      <Box mb={3}>
+        <MLink href={video.author_url}>{video.author_name}</MLink>
+        {` | `}
+        <MLink href={`https://www.youtube.com/watch?v=${videoId}`}>
+          Watch on YouTube
+        </MLink>
+      </Box>
       <WhyWatchVideo outputs={outputs} />
       {summaries && summaries.slice(-1)[0]?.hour_summaries && (
         <Stack>
