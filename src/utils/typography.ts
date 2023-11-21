@@ -30,12 +30,16 @@ function remToPx(rem: number | string) {
   return rem * 18
 }
 
-export const h1 = createStyleObject({
+export const title = createStyleObject({
   fontSize: 64,
   leading: 70,
   fontMetrics: robotoMetrics,
 })
 
+export const h1 = createStyleObject({
+  ...toPx(typography.h1),
+  fontMetrics: robotoMetrics,
+})
 export const h2 = createStyleObject({
   ...toPx(typography.h2),
   fontMetrics: robotoMetrics,

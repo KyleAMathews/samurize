@@ -64,6 +64,8 @@ const theme = createTheme({
 // Routes
 import Root from "./routes/root"
 import Video from "./routes/video"
+import PromptPlayground from "./routes/prompt-playground"
+import Index from "./routes/_index"
 
 const router = createBrowserRouter([
   {
@@ -72,8 +74,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+        index: true,
+        element: <Index />,
+      },
+      {
         path: `/video/:videoId`,
         element: <Video />,
+      },
+      {
+        path: `/prompt-playground`,
+        element: <PromptPlayground />,
       },
     ],
   },

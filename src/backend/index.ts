@@ -11,6 +11,7 @@ import { genUUID } from "electric-sql/util"
 import { getTranscriptAndMetadata } from "./youtube-info"
 import { cleanupTranscript } from "./cleanup-transcript"
 import { createVideoPitch } from "./why-watch-video"
+import { promptPlayground } from "./prompt-playground"
 
 /**
  * Initialization of tRPC backend
@@ -94,7 +95,12 @@ export const appRouter = router({
     .input(
       z.object({
         video_id: z.string(),
-        function: z.enum([`cleanupTranscript`, `whyWatchVideo`]),
+        prompt: z.string().optional(),
+        function: z.enum([
+          `cleanupTranscript`,
+          `whyWatchVideo`,
+          `promptPlayground`,
+        ]),
       })
     )
     .mutation(async (opts) => {
@@ -105,8 +111,6 @@ export const appRouter = router({
           electric: { db },
         },
       } = opts
-
-      console.log(`hi`)
 
       const video = await db.youtube_videos.findUnique({
         where: { id: input.video_id },
@@ -124,6 +128,11 @@ export const appRouter = router({
         response = await cleanupTranscript({ video })
       } else if (input.function === `whyWatchVideo`) {
         response = await createVideoPitch({ summary: summary[0] })
+      } else if (input.function === `promptPlayground`) {
+        response = await promptPlayground({
+          prompt: input.prompt,
+          summary: summary[0],
+        })
       }
 
       transact(() => {
@@ -137,6 +146,49 @@ export const appRouter = router({
           },
         })
       })
+    }),
+  promptPlayground: publicProcedure
+    .input(
+      z.object({
+        prompt: z.string().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const {
+        input,
+        ctx: {
+          transact,
+          electric: { db },
+        },
+      } = opts
+
+      console.time(`query`)
+      const videos = await db.raw({
+        sql: `SELECT * FROM youtube_videos ORDER BY RANDOM() LIMIT 10`,
+      })
+      console.log(videos.length, videos[0].title)
+      console.log(videos.map((v) => v.title))
+      const summaries = await Promise.all(
+        videos.map((video) =>
+          db.youtube_basic_summary.findMany({
+            where: { youtube_id: video.id },
+            orderBy: { created_at: `asc` },
+            take: 1,
+          })
+        )
+      )
+      console.timeEnd(`query`)
+
+      const responses = await Promise.all(
+        summaries.map((summary) =>
+          promptPlayground({
+            prompt: input.prompt,
+            summary: summary[0],
+          })
+        )
+      )
+
+      return responses
     }),
 })
 

@@ -14,7 +14,7 @@ async function summarizeChunk(chunk, i, progressAmount) {
         },
         {
           role: `user`,
-          content: `summarize this portion of a talk transcript (this is NOT the entire talk so don't use words like "start" or "conclude" in the summary as the end of this transcript isn't the end of the talk). The summary should be readable on its own but it'll also be used with other summaries of the talk to create an overall summary of the talk so be sure to include all information you need to summarize the talk as a whole.\n\n${chunk}`,
+          content: `summarize this section of a talk transcript (this is NOT the entire talk so don't use words like "start" or "conclude" in the summary as the end of this transcript isn't the end of the talk). The summary should be readable on its own but it'll also be used with other summaries of the talk to create an overall summary of the talk so be sure to include all information you need to summarize the talk as a whole. Start the summary by saying: "This section of the video"\n\n${chunk}`,
         },
       ],
     })
@@ -39,7 +39,7 @@ async function reduceChunks(chunks) {
         },
         {
           role: `user`,
-          content: `The following is a linear set of summaries of portions of a transcript. Take information equally from each to create a cohesive summary of the transcript as a whole.\n\n ${chunks.join(
+          content: `The following is a linear set of summaries of portions of a transcript. Take information equally from each to create a cohesive summary of the transcript as a whole. Start the summary by saying "The video"\n\n ${chunks.join(
             `\n\n`
           )}`,
         },
