@@ -100,31 +100,7 @@ export async function summarizeChunks(allChunks) {
         `chunk summaries done, starting final summary of ~${numTokens} tokens`
       )
 
-      let response
-      if (numTokens < 4000) {
-        response = await reduceChunks(hourSummary.chunkSummaries)
-      } else {
-        // summarize the chunk summaries to shrink down chunked summaries enough
-        // to create the final summary.
-        const output = (
-          await splitter.createDocuments([
-            hourSumary.chunkSummaries.join(`\n\n`),
-          ])
-        ).map((p) => p.pageContent)
-        let smallerSummaries
-        try {
-          smallerSummaries = await Promise.all(
-            output.map((chunk, i) => summarizeChunk(chunk, i, 1 / numAPICalls))
-          )
-        } catch (e) {
-          console.log(e)
-        }
-        const numTokens = smallerSummaries.join(` `).length / 1 / Math.E
-        console.log(
-          `2nd chunk summaries done, starting final summary of ~${numTokens} tokens`
-        )
-        response = await reduceChunks(smallerSummaries)
-      }
+      const response = await reduceChunks(hourSummary.chunkSummaries)
 
       hourSummary.summary = response
       summaries.push(hourSummary)

@@ -79,16 +79,32 @@ export const appRouter = router({
       const chunks = chunk(JSON.parse(video.transcript), true)
       console.log(`chunks length`, chunks.length)
       const hourSummaries = await summarizeChunks(chunks)
+      // TODO for speed, could refactor this call to be done in parallel with the
+      // whole video summary call.
+      const response = await createVideoPitch({
+        summary: { hour_summaries: JSON.stringify(hourSummaries) },
+      })
 
       transact(() => {
-        return db.youtube_basic_summary.create({
-          data: {
-            id: genUUID(),
-            youtube_id: input.id,
-            created_at: new Date(),
-            hour_summaries: JSON.stringify(hourSummaries),
-          },
-        })
+        Promise.all([
+          db.youtube_llm_outputs.create({
+            data: {
+              id: genUUID(),
+              youtube_id: input.id,
+              created_at: new Date(),
+              llm_prompt_type: `whyWatchVideo`,
+              output: JSON.stringify(response),
+            },
+          }),
+          db.youtube_basic_summary.create({
+            data: {
+              id: genUUID(),
+              youtube_id: input.id,
+              created_at: new Date(),
+              hour_summaries: JSON.stringify(hourSummaries),
+            },
+          }),
+        ])
       })
     }),
   genericLLMPrompt: publicProcedure
