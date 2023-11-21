@@ -180,7 +180,7 @@ export const appRouter = router({
 
       console.time(`query`)
       const videos = await db.raw({
-        sql: `SELECT * FROM youtube_videos ORDER BY RANDOM() LIMIT 10`,
+        sql: `SELECT * FROM youtube_videos ORDER BY created_at desc LIMIT 10`,
       })
       console.log(videos.length, videos[0].title)
       console.log(videos.map((v) => v.title))

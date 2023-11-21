@@ -1,6 +1,9 @@
 import { makeLLMCall } from "./make-llm-call"
 
 export async function promptPlayground({ prompt, summary }) {
+  if (!summary) {
+    return ``
+  }
   const summaryChunksStr = JSON.parse(
     summary.hour_summaries
   )[0].chunkSummaries.join(`\n\n`)
