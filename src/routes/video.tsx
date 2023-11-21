@@ -74,7 +74,7 @@ export default function Video() {
           })
         }}
       >
-        Cleanup Transcript
+        Show Transcript
       </Button>
       <Button
         onClick={() => {
