@@ -11,10 +11,10 @@ export function useCreateYoutubeVideo() {
       // Check if the video exists.
       const videoExists = await db.youtube_videos.findUnique({ where: { id } })
       if (videoExists === null) {
-        await trpc.createVideo.mutate({ id, score: 0 })
-      } else {
-        return id
+        await trpc.createVideo.mutate({ id })
       }
+    } else {
+      throw new Error(`Not a valid YouTube URL`)
     }
 
     return id
