@@ -11,10 +11,18 @@ import { trpc } from "../trpc"
 import { Markdown } from "../components/markdown"
 import { Helmet } from "react-helmet-async"
 
-function Summary({ start, endMins, endSecs, hour, i }) {
+type SummaryProps = {
+  start: number
+  endMins: number
+  endSecs: string
+  hour: any // Replace 'any' with the actual type of 'hour'
+  i: number
+}
+
+function Summary({ start, endMins, endSecs, hour, i }: SummaryProps) {
   const [seeMore, setSeeMore] = useState(false)
   return (
-    <>
+    <Stack mb={4}>
       <Typography variant="h4" fontWeight="700" mb={1}>
         {start}:00-{endMins}:{endSecs}
       </Typography>
@@ -40,12 +48,13 @@ function Summary({ start, endMins, endSecs, hour, i }) {
           )
         })}
       <Button
+        variant="outlined"
         sx={{ justifyContent: `left`, display: `block` }}
         onClick={() => setSeeMore((seeMore) => !seeMore)}
       >
         {seeMore ? `See Less` : `See More`}
       </Button>
-    </>
+    </Stack>
   )
 }
 function Summaries({ hourSummaries, endOffset }) {
@@ -98,10 +107,11 @@ export default function Video() {
   ) {
     return null
   }
-  console.log({ video, score: video.score })
-  console.log(video.score === 1 || video.score === null)
 
   const transcript = JSON.parse(video.transcript)
+  const isCleanTranscript = outputs.some(
+    (o) => o.llm_prompt_type === `cleanupTranscript`
+  )
   const endOffset = transcript.slice(-1)[0].offset / 1000 / 60
   return (
     <Stack p={3} maxWidth={600} margin="auto">
@@ -134,26 +144,18 @@ export default function Video() {
               />
             </Stack>
           )}
-          <Button
-            onClick={() => {
-              trpc.genericLLMPrompt.mutate({
-                video_id: videoId,
-                function: `cleanupTranscript`,
-              })
-            }}
-          >
-            Show Transcript
-          </Button>
-          <Button
-            onClick={() => {
-              trpc.genericLLMPrompt.mutate({
-                video_id: videoId,
-                function: `whyWatchVideo`,
-              })
-            }}
-          >
-            Why Watch Video?
-          </Button>
+          {!isCleanTranscript && (
+            <Button
+              onClick={() => {
+                trpc.genericLLMPrompt.mutate({
+                  video_id: videoId,
+                  function: `cleanupTranscript`,
+                })
+              }}
+            >
+              Generate clean transcript
+            </Button>
+          )}
           {outputs &&
             outputs.map((output, i: number) => {
               if (output.llm_prompt_type === `whyWatchVideo`) {
@@ -161,7 +163,7 @@ export default function Video() {
               if (output.llm_prompt_type === `cleanupTranscript`) {
                 return (
                   <Stack mb={1} key={`output-${i}`}>
-                    <Typography variant="h2" mb={1}>
+                    <Typography variant="h3" mb={1}>
                       Transcript
                     </Typography>
                     <Markdown>{JSON.parse(output.output)}</Markdown>
