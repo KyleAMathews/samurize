@@ -8,13 +8,9 @@ const typographyObject = new Typography({
 })
 const typography = typographyObject.toJSON()
 
-console.log({ typography, typographyObject })
-
 function toPx(elementStyles) {
   const fontSize = remToPx(elementStyles.fontSize)
-  console.log({ fontSize, lineHeight: elementStyles.lineHeight })
   const lineHeight = Math.round(fontSize * elementStyles.lineHeight * 1e2) / 1e2
-  console.log({ fontSize, lineHeight })
   return { fontSize, leading: lineHeight }
 }
 function remToPx(rem: number | string) {

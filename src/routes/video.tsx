@@ -1,6 +1,5 @@
+import { useState } from "react"
 import { useParams } from "react-router-dom"
-import { useLiveQuery } from "electric-sql/react"
-import { useElectric } from "../context"
 import { useVideo } from "../daos/youtube_videos"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
@@ -11,20 +10,69 @@ import { trpc } from "../trpc"
 import { Markdown } from "../components/markdown"
 import { Helmet } from "react-helmet-async"
 
-function Summary({ hourSummaries }) {
-  console.log(hourSummaries)
-  return hourSummaries.map((hour, i) => (
-    <Typography key={i} variant="p">
-      {hour.summary}
-    </Typography>
-  ))
+function Summary({ start, endMins, endSecs, hour, i }) {
+  const [seeMore, setSeeMore] = useState(false)
+  return (
+    <>
+      <Typography variant="h4" fontWeight="700" mb={1}>
+        {start}:00-{endMins}:{endSecs}
+      </Typography>
+      <Typography key={i} variant="body1" mb={2}>
+        {hour.summary}
+      </Typography>
+      {seeMore &&
+        hour.chunkSummaries.map((chunk: string, j: number) => {
+          const chunkStart = start + j * 5
+          const chunkEnd =
+            j === hour.chunkSummaries.length - 1
+              ? `${endMins}:${endSecs}`
+              : start + (j + 1) * 5 + `:00`
+          return (
+            <>
+              <Typography pl={2} variant="h4" fontWeight="700" mb={1}>
+                {chunkStart}:00-{chunkEnd}
+              </Typography>
+              <Typography pl={2} key={j} mb={2} variant="body1">
+                {chunk}
+              </Typography>
+            </>
+          )
+        })}
+      <Button
+        sx={{ justifyContent: `left`, display: `block` }}
+        onClick={() => setSeeMore((seeMore) => !seeMore)}
+      >
+        {seeMore ? `See Less` : `See More`}
+      </Button>
+    </>
+  )
+}
+function Summaries({ hourSummaries, endOffset }) {
+  console.log({ hourSummaries })
+  const hours = hourSummaries.length
+  return hourSummaries.map((hour: any, i: number) => {
+    const start = i * 60
+    const endMins = i === hours - 1 ? Math.floor(endOffset) : 60
+    console.log({ endOffset })
+    const endSecs =
+      i === hours - 1 ? ((endOffset % 60) / 60).toFixed(2).slice(2) : `00`
+    return (
+      <Summary
+        key={`video-summary-${i}`}
+        start={start}
+        endMins={endMins}
+        endSecs={endSecs}
+        hour={hour}
+        i={i}
+      />
+    )
+  })
 }
 
 function WhyWatchVideo({ outputs }) {
   const output = outputs.find(
     (output) => output.llm_prompt_type == `whyWatchVideo`
   )
-  console.log({ outputs, output })
   if (output === undefined) {
     return null
   } else {
@@ -52,6 +100,11 @@ export default function Video() {
     return null
   }
 
+  const transcript = JSON.parse(video.transcript)
+  console.log({ transcript })
+  const start = 0
+  const endOffset = transcript.slice(-1)[0].offset / 1000 / 60
+  console.log({ start, endOffset })
   return (
     <Stack p={3} maxWidth={600} margin="auto">
       <Helmet>
@@ -73,8 +126,9 @@ export default function Video() {
           <Typography variant="h2" mb={1}>
             Summary
           </Typography>
-          <Summary
+          <Summaries
             hourSummaries={JSON.parse(summaries.slice(-1)[0].hour_summaries)}
+            endOffset={endOffset}
           />
         </Stack>
       )}

@@ -17,7 +17,6 @@ import "@fontsource/rokkitt"
 const styles = {}
 for (const key in typographyStyles) {
   // if (typographyStyles.hasOwnProperty(key)) {
-  console.log({ key, value: typographyStyles[key] })
   const value = typographyStyles[key]
   if (key === `h2`) {
     styles[key] = {
@@ -41,7 +40,6 @@ for (const key in typographyStyles) {
     styles[key] = value
   }
 }
-console.log({ typographyStyles, styles })
 const theme = createTheme({
   spacing: 9,
   typography: {

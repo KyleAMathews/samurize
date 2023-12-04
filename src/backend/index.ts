@@ -45,7 +45,7 @@ export const appRouter = router({
       try {
         info = await getTranscriptAndMetadata(input.id)
       } catch (e) {
-        console.log(e)
+        console.log(`error getting video transcript/metadata`, e)
         throw new TRPCError({ error: e })
       }
       info.transcript = JSON.stringify(info.transcript)

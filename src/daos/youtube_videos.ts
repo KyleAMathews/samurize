@@ -25,7 +25,14 @@ export function useVideos() {
   const { db } = useElectric()!
 
   const { results } = useLiveQuery(
-    db.youtube_videos.liveMany({ orderBy: { created_at: `desc` }, take: 10 })
+    db.youtube_videos.liveMany({
+      select: {
+        id: true,
+        title: true,
+      },
+      // orderBy: { created_at: `desc` },
+      take: 10,
+    })
   )
 
   return results
@@ -40,6 +47,7 @@ export function useVideo(id: string) {
         title: true,
         author_url: true,
         author_name: true,
+        transcript: true,
       },
       where: { id },
     })
@@ -64,12 +72,7 @@ INNER JOIN (
 ) t2 ON t1.llm_prompt_type = t2.llm_prompt_type AND t1.created_at = t2.latest;`,
       args: [id],
     })
-    // db.youtube_llm_outputs.liveMany({
-    // where: { youtube_id: id },
-    // orderBy: { created_at: `asc` },
-    // })
   )
-  console.log({ outputs })
 
   return [results, summaries, outputs]
 }
