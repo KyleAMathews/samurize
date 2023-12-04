@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography"
 import MLink from "@mui/material/Link"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
+import LinearProgress from "@mui/material/LinearProgress"
 import { trpc } from "../trpc"
 import { Markdown } from "../components/markdown"
 import { Helmet } from "react-helmet-async"
@@ -48,12 +49,10 @@ function Summary({ start, endMins, endSecs, hour, i }) {
   )
 }
 function Summaries({ hourSummaries, endOffset }) {
-  console.log({ hourSummaries })
   const hours = hourSummaries.length
   return hourSummaries.map((hour: any, i: number) => {
     const start = i * 60
     const endMins = i === hours - 1 ? Math.floor(endOffset) : 60
-    console.log({ endOffset })
     const endSecs =
       i === hours - 1 ? ((endOffset % 60) / 60).toFixed(2).slice(2) : `00`
     return (
@@ -99,12 +98,11 @@ export default function Video() {
   ) {
     return null
   }
+  console.log({ video, score: video.score })
+  console.log(video.score === 1 || video.score === null)
 
   const transcript = JSON.parse(video.transcript)
-  console.log({ transcript })
-  const start = 0
   const endOffset = transcript.slice(-1)[0].offset / 1000 / 60
-  console.log({ start, endOffset })
   return (
     <Stack p={3} maxWidth={600} margin="auto">
       <Helmet>
@@ -120,53 +118,63 @@ export default function Video() {
           Watch on YouTube
         </MLink>
       </Box>
-      <WhyWatchVideo outputs={outputs} />
-      {summaries && summaries.slice(-1)[0]?.hour_summaries && (
-        <Stack>
-          <Typography variant="h2" mb={1}>
-            Summary
-          </Typography>
-          <Summaries
-            hourSummaries={JSON.parse(summaries.slice(-1)[0].hour_summaries)}
-            endOffset={endOffset}
-          />
-        </Stack>
+      {video.score === 1 || video.score === null ? (
+        <>
+          <WhyWatchVideo outputs={outputs} />
+          {summaries && summaries.slice(-1)[0]?.hour_summaries && (
+            <Stack>
+              <Typography variant="h2" mb={1}>
+                Summary
+              </Typography>
+              <Summaries
+                hourSummaries={JSON.parse(
+                  summaries.slice(-1)[0].hour_summaries
+                )}
+                endOffset={endOffset}
+              />
+            </Stack>
+          )}
+          <Button
+            onClick={() => {
+              trpc.genericLLMPrompt.mutate({
+                video_id: videoId,
+                function: `cleanupTranscript`,
+              })
+            }}
+          >
+            Show Transcript
+          </Button>
+          <Button
+            onClick={() => {
+              trpc.genericLLMPrompt.mutate({
+                video_id: videoId,
+                function: `whyWatchVideo`,
+              })
+            }}
+          >
+            Why Watch Video?
+          </Button>
+          {outputs &&
+            outputs.map((output, i: number) => {
+              if (output.llm_prompt_type === `whyWatchVideo`) {
+              }
+              if (output.llm_prompt_type === `cleanupTranscript`) {
+                return (
+                  <Stack mb={1} key={`output-${i}`}>
+                    <Typography variant="h2" mb={1}>
+                      Transcript
+                    </Typography>
+                    <Markdown>{JSON.parse(output.output)}</Markdown>
+                  </Stack>
+                )
+              }
+            })}
+        </>
+      ) : (
+        <Box sx={{ width: `100%` }}>
+          <LinearProgress variant="determinate" value={video.score * 100} />
+        </Box>
       )}
-      <Button
-        onClick={() => {
-          trpc.genericLLMPrompt.mutate({
-            video_id: videoId,
-            function: `cleanupTranscript`,
-          })
-        }}
-      >
-        Show Transcript
-      </Button>
-      <Button
-        onClick={() => {
-          trpc.genericLLMPrompt.mutate({
-            video_id: videoId,
-            function: `whyWatchVideo`,
-          })
-        }}
-      >
-        Why Watch Video?
-      </Button>
-      {outputs &&
-        outputs.map((output) => {
-          if (output.llm_prompt_type === `whyWatchVideo`) {
-          }
-          if (output.llm_prompt_type === `cleanupTranscript`) {
-            return (
-              <Stack mb={1}>
-                <Typography variant="h2" mb={1}>
-                  Transcript
-                </Typography>
-                <Markdown>{JSON.parse(output.output)}</Markdown>
-              </Stack>
-            )
-          }
-        })}
     </Stack>
   )
 }

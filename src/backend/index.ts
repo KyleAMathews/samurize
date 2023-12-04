@@ -56,6 +56,7 @@ export const appRouter = router({
             id: input.id,
             created_at: new Date(),
             updated_at: new Date(),
+            score: 0.1,
             ...info,
           },
         })
@@ -76,9 +77,34 @@ export const appRouter = router({
         where: { id: input.id },
       })
 
+      let progress = video.score
+      function updateProgress({
+        increment,
+        value,
+      }: {
+        increment?: number
+        value?: number
+      }) {
+        if (increment) {
+          progress = progress + increment
+        } else {
+          progress = value
+        }
+        db.youtube_videos.update({
+          data: {
+            score: progress,
+          },
+          where: {
+            id: input.id,
+          },
+        })
+      }
+
       const chunks = chunk(JSON.parse(video.transcript), true)
       console.log(`chunks length`, chunks.length)
-      const hourSummaries = await summarizeChunks(chunks)
+      const hourSummaries = await summarizeChunks(chunks, updateProgress)
+      updateProgress({ value: 0.9 })
+
       // TODO for speed, could refactor this call to be done in parallel with the
       // whole video summary call.
       const response = await createVideoPitch({
@@ -87,6 +113,14 @@ export const appRouter = router({
 
       transact(() => {
         Promise.all([
+          db.youtube_videos.update({
+            data: {
+              score: 1,
+            },
+            where: {
+              id: input.id,
+            },
+          }),
           db.youtube_llm_outputs.create({
             data: {
               id: genUUID(),

@@ -11,7 +11,7 @@ export function useCreateYoutubeVideo() {
       // Check if the video exists.
       const videoExists = await db.youtube_videos.findUnique({ where: { id } })
       if (videoExists === null) {
-        await trpc.createVideo.mutate({ id })
+        await trpc.createVideo.mutate({ id, score: 0 })
       } else {
         return id
       }
@@ -48,6 +48,7 @@ export function useVideo(id: string) {
         author_url: true,
         author_name: true,
         transcript: true,
+        score: true,
       },
       where: { id },
     })

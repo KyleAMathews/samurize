@@ -2,7 +2,7 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter"
 import { makeLLMCall } from "./make-llm-call"
 import { sdk } from "./llm-api"
 
-async function summarizeChunk(chunk, i, progressAmount) {
+async function summarizeChunk(chunk, i, updateProgress, progressAmount) {
   let response
   try {
     response = await sdk.post_chat_completions({
@@ -24,6 +24,7 @@ async function summarizeChunk(chunk, i, progressAmount) {
   }
 
   console.log(`finished summary`, i)
+  updateProgress({ increment: progressAmount })
 
   return response.data.choices[0].message.content
 }
@@ -71,7 +72,7 @@ interface HourSummary {
   chunkSummaries: string[]
 }
 
-export async function summarizeChunks(allChunks) {
+export async function summarizeChunks(allChunks, updateProgress) {
   const summaries: HourSummary[] = []
 
   const size = 60 / 5
@@ -90,7 +91,9 @@ export async function summarizeChunks(allChunks) {
       console.log(`chunk summary`, i)
       try {
         hourSummary.chunkSummaries = await Promise.all(
-          chunks.map((chunk, i) => summarizeChunk(chunk, i, 1 / numAPICalls))
+          chunks.map((chunk, i) =>
+            summarizeChunk(chunk, i, updateProgress, 0.8 / numAPICalls)
+          )
         )
       } catch (e) {
         console.log(e)
