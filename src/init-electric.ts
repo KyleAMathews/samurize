@@ -70,7 +70,6 @@ async function syncTables(electric) {
     tracker.addPromise(`youtube_videos`, shape2.synced)
     tracker.addPromise(`youtube_basic_summary`, shape3.synced)
     tracker.addPromise(`youtube_llm_outputs`, shape4.synced)
-    console.log({ shape1 })
 
     await Promise.all([
       shape1.synced,
@@ -78,16 +77,14 @@ async function syncTables(electric) {
       shape3.synced,
       shape4.synced,
     ])
-    console.log(Object.assign({}, electric))
 
     console.timeEnd(`sync`)
-    console.log(new Date().getTime() - performance.timing.loadEventStart)
   } catch (error) {
     console.log(`initial electric sync failed`, error)
   }
 }
 
-export default async function initElectric() {
+export async function initElectric() {
   const token = authToken()
   const config = {
     auth: {
