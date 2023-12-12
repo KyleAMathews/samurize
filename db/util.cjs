@@ -16,7 +16,7 @@ const proxyPassword = `proxy_password`
 const DATABASE_URL = buildDatabaseURL(
   dbUser,
   proxyPassword,
-  `localhost`,
+  `0.0.0.0`,
   proxyPort,
   appName
 )
@@ -36,7 +36,7 @@ const CONTAINER_DATABASE_URL = buildDatabaseURL(
 const PUBLIC_DATABASE_URL = buildDatabaseURL(
   dbUser,
   null,
-  `localhost`,
+  `0.0.0.0`,
   proxyPort,
   appName
 )
