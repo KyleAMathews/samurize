@@ -1,0 +1,10 @@
+{
+  "name": "samurize",
+  "main": "party/index.ts",
+  "compatibilityDate": "2023-12-12",
+  "serve": {
+    "path": "dist",
+    "singlePageApp": true
+  }
+}
+
