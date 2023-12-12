@@ -114,7 +114,7 @@ export default function Video() {
   )
   const endOffset = transcript.slice(-1)[0].offset / 1000 / 60
   return (
-    <Stack p={3} maxWidth={600} margin="auto">
+    <Stack p={2} maxWidth={600} margin="auto">
       <Helmet>
         <title>{video.title} | Samurize</title>
       </Helmet>

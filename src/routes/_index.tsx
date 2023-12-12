@@ -19,7 +19,7 @@ export default function Index() {
   }
 
   return (
-    <Stack spacing={1} p={3} maxWidth={600} margin="auto">
+    <Stack spacing={1} p={2} maxWidth={600} margin="auto">
       <Helmet>
         <title>Samurize</title>
       </Helmet>

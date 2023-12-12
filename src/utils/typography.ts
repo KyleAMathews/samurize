@@ -3,7 +3,7 @@ import robotoMetrics from "@capsizecss/metrics/roboto"
 import Typography from "typography"
 
 const typographyObject = new Typography({
-  baseFontSize: `18px`,
+  baseFontSize: `16px`,
   // scaleRatio: 4,
 })
 const typography = typographyObject.toJSON()
@@ -62,7 +62,7 @@ export const h6 = createStyleObject({
 })
 
 export const body1 = createStyleObject({
-  fontSize: 18,
+  fontSize: 17,
   leading: remToPx(typographyObject.options.baseLineHeight),
   fontMetrics: robotoMetrics,
 })
