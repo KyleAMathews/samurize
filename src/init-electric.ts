@@ -43,67 +43,82 @@ class PromiseTracker {
 
 const tracker = new PromiseTracker()
 
-export async function initElectric() {
+declare const ELECTRIC_URL: string
+const electricUrl =
+  typeof ELECTRIC_URL === `undefined`
+    ? `ws://localhost:5133`
+    : `wss://${ELECTRIC_URL}`
+
+async function syncTables(electric) {
+  try {
+    const [shape1, shape2, shape3, shape4] = await Promise.all([
+      electric.db.trpc_calls.sync(),
+      electric.db.youtube_videos.sync(),
+      electric.db.youtube_basic_summary.sync({
+        include: {
+          youtube_videos: true,
+        },
+      }),
+      electric.db.youtube_llm_outputs.sync({
+        include: {
+          youtube_videos: true,
+        },
+      }),
+    ])
+
+    tracker.addPromise(`trpc_calls`, shape1.synced)
+    tracker.addPromise(`youtube_videos`, shape2.synced)
+    tracker.addPromise(`youtube_basic_summary`, shape3.synced)
+    tracker.addPromise(`youtube_llm_outputs`, shape4.synced)
+    console.log({ shape1 })
+
+    await Promise.all([
+      shape1.synced,
+      shape2.synced,
+      shape3.synced,
+      shape4.synced,
+    ])
+    console.log(Object.assign({}, electric))
+
+    console.timeEnd(`sync`)
+    console.log(new Date().getTime() - performance.timing.loadEventStart)
+  } catch (error) {
+    console.log(`initial electric sync failed`, error)
+  }
+}
+
+export default async function initElectric() {
   const token = authToken()
   const config = {
     auth: {
       token: token,
     },
     debug: false, //DEBUG_MODE,
-    // url: ELECTRIC_URL,
+    url: electricUrl,
   }
 
+  console.time(`sync`)
   const { tabId } = uniqueTabId()
   const tabScopedDbName = `electric-${tabId}.db`
 
-  console.time(`electric auth`)
   const conn = await ElectricDatabase.init(tabScopedDbName, sqliteWasm)
-  console.log({ conn, sqliteWasm })
   const electric = await electrify(conn, schema, config)
-  window.sqlite = conn.sqlite3
-  console.log(Object.assign({}, electric))
-  console.timeEnd(`electric auth`)
-  console.log(new Date().getTime() - performance.timing.loadEventStart)
+  let isTable = false
+  // Try querying to see if the table we want exists already. If it does,
+  // we don't need to wait for syncing to do the initial render.
+  try {
+    await electric.db.trpc_calls.findMany()
+    isTable = true
+  } catch (e) {
+    // Nothing to do
+  }
 
-  // Start syncing but don't block rendering the app on it.
-  new Promise(async () => {
-    console.time(`sync`)
-    try {
-      const [shape1, shape2, shape3, shape4] = await Promise.all([
-        electric.db.trpc_calls.sync(),
-        electric.db.youtube_videos.sync(),
-        electric.db.youtube_basic_summary.sync({
-          include: {
-            youtube_videos: true,
-          },
-        }),
-        electric.db.youtube_llm_outputs.sync({
-          include: {
-            youtube_videos: true,
-          },
-        }),
-      ])
-
-      tracker.addPromise(`trpc_calls`, shape1.synced)
-      tracker.addPromise(`youtube_videos`, shape2.synced)
-      tracker.addPromise(`youtube_basic_summary`, shape3.synced)
-      tracker.addPromise(`youtube_llm_outputs`, shape4.synced)
-      console.log({ shape1 })
-
-      await Promise.all([
-        shape1.synced,
-        shape2.synced,
-        shape3.synced,
-        shape4.synced,
-      ])
-      console.log(Object.assign({}, electric))
-
-      console.timeEnd(`sync`)
-      console.log(new Date().getTime() - performance.timing.loadEventStart)
-    } catch (error) {
-      console.log(`initial electric sync failed`, error)
-    }
-  })
+  if (isTable) {
+    // Start syncing but don't block rendering the app on it.
+    Promise.resolve().then(() => syncTables(electric))
+  } else {
+    await syncTables(electric)
+  }
 
   return electric
 }
