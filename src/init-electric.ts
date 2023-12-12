@@ -49,6 +49,8 @@ const electricUrl =
     ? `ws://localhost:5133`
     : `wss://${ELECTRIC_URL}`
 
+console.log({ electricUrl })
+
 async function syncTables(electric) {
   try {
     const [shape1, shape2, shape3, shape4] = await Promise.all([

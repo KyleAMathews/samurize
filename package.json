@@ -56,7 +56,8 @@
     "vite": "^5.0.8",
     "wa-sqlite": "rhashimoto/wa-sqlite#master",
     "youtube-metadata-from-url": "^1.0.3",
-    "youtube-transcript": "^1.0.6"
+    "youtube-transcript": "^1.0.6",
+    "partysocket": "0.0.17"
   },
   "homepage": "https://github.com/KyleAMathews/vite-react-router-electric-sql-starter#readme",
   "keywords": [
@@ -89,6 +90,7 @@
   },
   "devDependencies": {
     "@simbathesailor/use-what-changed": "^2.0.0",
-    "vitest": "^1.0.4"
+    "vitest": "^1.0.4",
+    "partykit": "0.0.45"
   }
 }

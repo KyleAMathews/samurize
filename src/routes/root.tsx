@@ -6,7 +6,6 @@ import Divider from "@mui/material/Divider"
 import { title } from "../utils/typography"
 
 export default function Root() {
-  console.log(`render root`)
   return (
     <Stack p={2} divider={<Divider />} maxWidth={960} margin="auto">
       <Typography

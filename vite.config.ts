@@ -5,4 +5,7 @@ import react from "@vitejs/plugin-react-swc"
 export default defineConfig({
   plugins: [react()],
   assetsInclude: [`**/*.wasm`],
+  define: {
+    ELECTRIC_URL: JSON.stringify(process.env.ELECTRIC_URL),
+  },
 })
