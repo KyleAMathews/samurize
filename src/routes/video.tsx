@@ -97,16 +97,7 @@ function WhyWatchVideo({ outputs }) {
 
 export default function Video() {
   const { videoId } = useParams()
-  const [video, summaries, outputs] = useVideo(videoId)
-
-  if (
-    videoId === undefined ||
-    video === undefined ||
-    summaries === undefined ||
-    outputs === undefined
-  ) {
-    return null
-  }
+  const { video, summaries, outputs } = useVideo(videoId)
 
   const transcript = JSON.parse(video.transcript)
   const endOffset = transcript.slice(-1)[0].offset / 1000 / 60

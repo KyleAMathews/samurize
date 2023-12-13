@@ -53,22 +53,36 @@ INNER JOIN (
   }
 }
 
-export function useVideo(id: string) {
-  const { db } = useElectric()!
+function useCacheOrLiveQueries(queries) {
   const location = useLocation()
 
   const cachedResult = routeCache.get(location.pathname)
+
+  if (!cachedResult) {
+    throw new Error(
+      `precached query results not found for ${location.pathname}. Check your loader code to make sure it's caching correctly`
+    )
+  }
+
+  const results = Object.entries(queries).map(([_, query]) => {
+    const { results } = useLiveQuery(query)
+    return results
+  })
+
+  const resultsByKey = Object.fromEntries(
+    results.map((result, i) => [Object.keys(queries)[i], result])
+  )
+
+  if (results.some((r) => r === undefined)) {
+    return cachedResult
+  } else {
+    return resultsByKey
+  }
+}
+
+export function useVideo(id: string) {
+  const { db } = useElectric()!
   const queries = videoQueries(db, { id })
 
-  const { results: video } = useLiveQuery(queries.video)
-
-  const { results: summaries } = useLiveQuery(queries.summaries)
-
-  const { results: outputs } = useLiveQuery(queries.outputs)
-
-  if (video === undefined || summaries === undefined || outputs === undefined) {
-    return [cachedResult.video, cachedResult.summaries, cachedResult.outputs]
-  } else {
-    return [video, summaries, outputs]
-  }
+  return useCacheOrLiveQueries(queries)
 }
