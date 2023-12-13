@@ -109,9 +109,6 @@ export default function Video() {
   }
 
   const transcript = JSON.parse(video.transcript)
-  const isCleanTranscript = outputs.some(
-    (o) => o.llm_prompt_type === `cleanupTranscript`
-  )
   const endOffset = transcript.slice(-1)[0].offset / 1000 / 60
   return (
     <Stack p={2} maxWidth={600} margin="auto">
@@ -144,33 +141,6 @@ export default function Video() {
               />
             </Stack>
           )}
-          {!isCleanTranscript && (
-            <Button
-              onClick={() => {
-                trpc.genericLLMPrompt.mutate({
-                  video_id: videoId,
-                  function: `cleanupTranscript`,
-                })
-              }}
-            >
-              Generate clean transcript
-            </Button>
-          )}
-          {outputs &&
-            outputs.map((output, i: number) => {
-              if (output.llm_prompt_type === `whyWatchVideo`) {
-              }
-              if (output.llm_prompt_type === `cleanupTranscript`) {
-                return (
-                  <Stack mb={1} key={`output-${i}`}>
-                    <Typography variant="h3" mb={1}>
-                      Transcript
-                    </Typography>
-                    <Markdown>{JSON.parse(output.output)}</Markdown>
-                  </Stack>
-                )
-              }
-            })}
         </>
       ) : (
         <Box sx={{ width: `100%` }}>
