@@ -12,13 +12,8 @@ import { trpc } from "../trpc"
 
 export default function Index() {
   const createVideo = useCreateYoutubeVideo()
-  const videos = useVideos()
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  if (videos === undefined) {
-    return null
-  }
 
   return (
     <Stack spacing={1} p={2} maxWidth={600} margin="auto">

@@ -23,34 +23,6 @@ export function useCreateYoutubeVideo() {
   }
 }
 
-export const indexQueries = (db) => {
-  return {
-    videos: db.youtube_videos.liveMany({
-      select: {
-        id: true,
-        title: true,
-      },
-      // orderBy: { created_at: `desc` },
-      take: 10,
-    }),
-  }
-}
-
-export function useVideos() {
-  const { db } = useElectric()!
-  const location = useLocation()
-
-  const queries = indexQueries(db)
-  const cachedResult = routeCache.get(location.pathname)
-  const { results } = useLiveQuery(queries.videos)
-
-  if (results === undefined) {
-    return cachedResult.videos
-  } else {
-    return results
-  }
-}
-
 export const videoQueries = (db, { id }) => {
   return {
     video: db.youtube_videos.liveUnique({

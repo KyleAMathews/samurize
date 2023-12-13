@@ -102,15 +102,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Index />,
-        loader: async (props) => {
-          await areTablesSynced([`youtube_videos`])
-
-          // Warm cache for route queries
-          const queries = indexQueries(electricRef.value.db)
-          const queryResults = await transformQueriesObject(queries)
-          routeCache.set(new URL(props.request.url).pathname, queryResults)
-          return null
-        },
       },
       {
         path: `/video/:videoId`,
