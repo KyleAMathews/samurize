@@ -138,8 +138,7 @@ const router = createBrowserRouter([
 ])
 
 async function render() {
-  const electric = await initElectric()
-  electricRef.value = electric
+  const electric = await initElectric(electricRef)
   ReactDOM.createRoot(document.getElementById(`root`)!).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>

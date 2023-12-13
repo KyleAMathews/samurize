@@ -86,7 +86,7 @@ async function syncTables(electric) {
   }
 }
 
-export async function initElectric() {
+export async function initElectric(electricRef) {
   const token = authToken()
   const config = {
     auth: {
@@ -102,6 +102,7 @@ export async function initElectric() {
 
   const conn = await ElectricDatabase.init(tabScopedDbName, sqliteWasm)
   const electric = await electrify(conn, schema, config)
+  electricRef.value = electric
   let isTable = false
   // Try querying to see if the table we want exists already. If it does,
   // we don't need to wait for syncing to do the initial render.
