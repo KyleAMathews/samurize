@@ -61,7 +61,31 @@ const theme = createTheme({
     fontSize: 16,
     ...styles,
   },
+  components: {
+    // Name of the component ⚛️
+    MuiButtonBase: {
+      defaultProps: {
+        // The props to apply
+        disableRipple: true, // No more ripple, on the whole application 💣!
+      },
+    },
+    // Name of the component ⚛️
+    MuiCssBaseline: {
+      styleOverrides: {
+        "*, *::before, *::after": {
+          transition: `none !important`,
+          animation: `none !important`,
+        },
+      },
+    },
+  },
+  transitions: {
+    // So we have `transition: none;` everywhere
+    create: () => `none`,
+  },
 })
+
+console.log(theme)
 
 // Routes
 import Root from "./routes/root"

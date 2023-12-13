@@ -17,7 +17,7 @@ const RootContainer = styled(`div`)(({ theme }) => ({
 
 export default function Root() {
   return (
-    <RootContainer divider={<Divider />} maxWidth={960} margin="auto">
+    <div divider={<Divider />} maxWidth={960} margin="auto">
       <Typography
         variant="h1"
         sx={{ ...title }}
@@ -30,6 +30,6 @@ export default function Root() {
         </Link>
       </Typography>
       <Outlet />
-    </RootContainer>
+    </div>
   )
 }
