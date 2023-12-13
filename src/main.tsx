@@ -11,6 +11,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import * as typographyStyles from "./utils/typography"
 import { HelmetProvider } from "react-helmet-async"
 
+import { videoQueries, indexQueries } from "./daos/youtube_videos"
+import { routeCache, transformQueriesObject } from "./daos/cache"
+
 import "@fontsource/source-sans-pro"
 import "@fontsource/rokkitt"
 
@@ -75,12 +78,30 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Index />,
+        loader: async (props) => {
+          await areTablesSynced([`youtube_videos`])
+
+          // Warm cache for route queries
+          const queries = indexQueries(electricRef.value.db)
+          const queryResults = await transformQueriesObject(queries)
+          routeCache.set(new URL(props.request.url).pathname, queryResults)
+          return null
+        },
       },
       {
         path: `/video/:videoId`,
         element: <Video />,
-        loader: async () => {
+        loader: async (props) => {
+          const params = props.params
           await areTablesSynced([`youtube_videos`])
+
+          // Warm cache for route queries
+          const queries = videoQueries(electricRef.value.db, {
+            id: params.videoId,
+          })
+          const queryResults = await transformQueriesObject(queries)
+          routeCache.set(new URL(props.request.url).pathname, queryResults)
+
           return null
         },
       },

@@ -1,7 +1,9 @@
 import { useLiveQuery } from "electric-sql/react"
+import { useLocation } from "react-router-dom"
 import { useElectric } from "../context"
 import getYoutubeId from "get-youtube-id"
 import { trpc } from "../trpc"
+import { routeCache } from "./cache"
 
 export function useCreateYoutubeVideo() {
   const { db } = useElectric()!
@@ -21,28 +23,37 @@ export function useCreateYoutubeVideo() {
   }
 }
 
-export function useVideos() {
-  const { db } = useElectric()!
-
-  const { results } = useLiveQuery(
-    db.youtube_videos.liveMany({
+export const indexQueries = (db) => {
+  return {
+    videos: db.youtube_videos.liveMany({
       select: {
         id: true,
         title: true,
       },
       // orderBy: { created_at: `desc` },
       take: 10,
-    })
-  )
-
-  return results
+    }),
+  }
 }
 
-export function useVideo(id: string) {
+export function useVideos() {
   const { db } = useElectric()!
+  const location = useLocation()
 
-  const { results } = useLiveQuery(
-    db.youtube_videos.liveUnique({
+  const queries = indexQueries(db)
+  const cachedResult = routeCache.get(location.pathname)
+  const { results } = useLiveQuery(queries.videos)
+
+  if (results === undefined) {
+    return cachedResult.videos
+  } else {
+    return results
+  }
+}
+
+export const videoQueries = (db, { id }) => {
+  return {
+    video: db.youtube_videos.liveUnique({
       select: {
         title: true,
         author_url: true,
@@ -51,18 +62,12 @@ export function useVideo(id: string) {
         score: true,
       },
       where: { id },
-    })
-  )
-
-  const { results: summaries } = useLiveQuery(
-    db.youtube_basic_summary.liveMany({
+    }),
+    summaries: db.youtube_basic_summary.liveMany({
       where: { youtube_id: id },
       orderBy: { created_at: `asc` },
-    })
-  )
-
-  const { results: outputs } = useLiveQuery(
-    db.liveRaw({
+    }),
+    outputs: db.liveRaw({
       sql: `SELECT t1.*
 FROM youtube_llm_outputs t1
 INNER JOIN (
@@ -72,8 +77,26 @@ INNER JOIN (
     GROUP BY llm_prompt_type
 ) t2 ON t1.llm_prompt_type = t2.llm_prompt_type AND t1.created_at = t2.latest;`,
       args: [id],
-    })
-  )
+    }),
+  }
+}
 
-  return [results, summaries, outputs]
+export function useVideo(id: string) {
+  const { db } = useElectric()!
+  const location = useLocation()
+
+  const cachedResult = routeCache.get(location.pathname)
+  const queries = videoQueries(db, { id })
+
+  const { results: video } = useLiveQuery(queries.video)
+
+  const { results: summaries } = useLiveQuery(queries.summaries)
+
+  const { results: outputs } = useLiveQuery(queries.outputs)
+
+  if (video === undefined || summaries === undefined || outputs === undefined) {
+    return [cachedResult.video, cachedResult.summaries, cachedResult.outputs]
+  } else {
+    return [video, summaries, outputs]
+  }
 }
