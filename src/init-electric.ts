@@ -3,6 +3,7 @@ import { uniqueTabId } from "electric-sql/util"
 import { authToken } from "./auth"
 import sqliteWasm from "wa-sqlite/dist/wa-sqlite-async.wasm?asset"
 import { Electric, schema } from "./generated/client"
+import { tracer } from "./utils/tracer"
 
 class PromiseTracker {
   private promises: Map<string, Promise<any>>
@@ -52,38 +53,41 @@ const electricUrl =
 console.log({ electricUrl })
 
 async function syncTables(electric) {
-  try {
-    const [shape1, shape2, shape3, shape4] = await Promise.all([
-      electric.db.trpc_calls.sync(),
-      electric.db.youtube_videos.sync(),
-      electric.db.youtube_basic_summary.sync({
-        include: {
-          youtube_videos: true,
-        },
-      }),
-      electric.db.youtube_llm_outputs.sync({
-        include: {
-          youtube_videos: true,
-        },
-      }),
-    ])
+  await tracer.startActiveSpan(`syncTables`, {}, async (span) => {
+    try {
+      const [shape1, shape2, shape3, shape4] = await Promise.all([
+        electric.db.trpc_calls.sync(),
+        electric.db.youtube_videos.sync(),
+        electric.db.youtube_basic_summary.sync({
+          include: {
+            youtube_videos: true,
+          },
+        }),
+        electric.db.youtube_llm_outputs.sync({
+          include: {
+            youtube_videos: true,
+          },
+        }),
+      ])
 
-    tracker.addPromise(`trpc_calls`, shape1.synced)
-    tracker.addPromise(`youtube_videos`, shape2.synced)
-    tracker.addPromise(`youtube_basic_summary`, shape3.synced)
-    tracker.addPromise(`youtube_llm_outputs`, shape4.synced)
+      tracker.addPromise(`trpc_calls`, shape1.synced)
+      tracker.addPromise(`youtube_videos`, shape2.synced)
+      tracker.addPromise(`youtube_basic_summary`, shape3.synced)
+      tracker.addPromise(`youtube_llm_outputs`, shape4.synced)
 
-    await Promise.all([
-      shape1.synced,
-      shape2.synced,
-      shape3.synced,
-      shape4.synced,
-    ])
+      await Promise.all([
+        shape1.synced,
+        shape2.synced,
+        shape3.synced,
+        shape4.synced,
+      ])
 
-    console.timeEnd(`sync`)
-  } catch (error) {
-    console.log(`initial electric sync failed`, error)
-  }
+      console.timeEnd(`sync`)
+      span.end()
+    } catch (error) {
+      console.log(`initial electric sync failed`, error)
+    }
+  })
 }
 
 export async function initElectric(electricRef) {
