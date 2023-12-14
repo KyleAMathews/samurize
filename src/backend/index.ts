@@ -42,27 +42,36 @@ export const appRouter = router({
       } = opts
 
       console.log(`createVideo`, input.id)
-      let info = {}
-      try {
-        info = await getTranscriptAndMetadata(input.id)
-      } catch (e) {
-        console.log(`error getting video transcript/metadata`, e)
-        throw new TRPCError({ error: e })
-      }
-      info.transcript = JSON.stringify(info.transcript)
-
-      transact(() => {
-        console.log(`finished createVideo`, input.id)
-        return db.youtube_videos.create({
-          data: {
-            id: input.id,
-            created_at: new Date(),
-            updated_at: new Date(),
-            score: 0.1,
-            ...info,
-          },
-        })
+      const video = await db.youtube_videos.findUnique({
+        where: { id: input.id },
       })
+
+      // Video already exists so just return.
+      if (video) {
+        return
+      } else {
+        let info = {}
+        try {
+          info = await getTranscriptAndMetadata(input.id)
+        } catch (e) {
+          console.log(`error getting video transcript/metadata`, e)
+          throw new TRPCError({ error: e })
+        }
+        info.transcript = JSON.stringify(info.transcript)
+
+        transact(() => {
+          console.log(`finished createVideo`, input.id)
+          return db.youtube_videos.create({
+            data: {
+              id: input.id,
+              created_at: new Date(),
+              updated_at: new Date(),
+              score: 0.1,
+              ...info,
+            },
+          })
+        })
+      }
     }),
   youtubeBasicSummary: publicProcedure
     .input(z.object({ id: z.string() }))
