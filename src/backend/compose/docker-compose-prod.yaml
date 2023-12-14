@@ -72,10 +72,6 @@ services:
     labels:
       caddy: "${ELECTRIC_PRODUCTION_DOMAIN:-example.com}"
       caddy.reverse_proxy: /v1/traces "{{upstreams http 4318}}"
-      caddy.reverse_proxy.header_down_1: +Access-Control-Allow-Origin "*"
-      caddy.reverse_proxy.header_down_2: +Access-Control-Allow-Methods "GET, POST, PATCH, OPTIONS"
-      caddy.reverse_proxy.header_down_3: +Access-Control-Allow-Headers "Content-Type, Authorization, Time-Zone"
-      caddy.reverse_proxy.header_down_4: +Access-Control-Allow-Credentials "true"
     environment:
       HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
       HONEYCOMB_DATASET: ${HONEYCOMB_DATASET}
