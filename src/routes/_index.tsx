@@ -9,6 +9,8 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import { Helmet } from "react-helmet-async"
 import { trpc } from "../trpc"
+import { tracer } from "../utils/tracer"
+import { context } from "@opentelemetry/api"
 
 export default function Index() {
   const createVideo = useCreateYoutubeVideo()
@@ -22,28 +24,48 @@ export default function Index() {
       </Helmet>
       <form
         onSubmit={async (e) => {
-          e.preventDefault()
-          const form = e.currentTarget
-          const formData = new FormData(form)
-          const data = Object.fromEntries(formData)
-          let id: string | null = null
-          let error: Error | null = null
+          await tracer.startActiveSpan(`createVideo`, async (span) => {
+            e.preventDefault()
+            const form = e.currentTarget
+            const formData = new FormData(form)
+            const data = Object.fromEntries(formData)
+            let id: string | null = null
+            let videoExists: boolean = false
+            let error: Error | null = null
+            const ctx = context.active()
 
-          try {
-            id = await createVideo(data.youtube_url)
-          } catch (e) {
-            error = e as Error
-            console.log(e)
-          }
+            try {
+              const result = await createVideo(data.youtube_url.toString())
+              id = result.id
+              videoExists = result.videoExists
+            } catch (e) {
+              error = e as Error
+              console.log(e)
+            }
 
-          if (!error && id) {
-            setErrorMessage(null)
-            trpc.youtubeBasicSummary.mutate({ id })
-            form.reset()
-            navigate(`/video/${id}`)
-          } else if (error) {
-            setErrorMessage(error.message)
-          }
+            if (!error && id) {
+              setErrorMessage(null)
+              // First time we've seen this video so let's kickoff the summarization.
+              if (!videoExists) {
+                tracer.startActiveSpan(
+                  `trpc.youtubeBasicSummary`,
+                  { attributes: { youtubeId: id } },
+                  ctx,
+                  async (span) => {
+                    await trpc.youtubeBasicSummary.mutate({ id })
+                    span.end()
+                  }
+                )
+              }
+              span.end()
+              navigate(`/video/${id}`)
+            } else if (error) {
+              form.reset()
+              span.recordException(error)
+              span.end()
+              setErrorMessage(error.message)
+            }
+          })
         }}
       >
         <Stack spacing={1} mb={3}>

@@ -4,22 +4,37 @@ import { useElectric } from "../context"
 import getYoutubeId from "get-youtube-id"
 import { trpc } from "../trpc"
 import { routeCache } from "./cache"
+import { tracer } from "../utils/tracer"
+import { trace, context } from "@opentelemetry/api"
 
 export function useCreateYoutubeVideo() {
   const { db } = useElectric()!
-  return async (url) => {
+  return async (url: string) => {
+    const span = trace.getActiveSpan()!
+    const ctx = context.active()
     const id = getYoutubeId(url)
+    span.setAttribute(`youtubeId`, id || ``)
+    let videoExists
     if (id) {
       // Check if the video exists.
-      const videoExists = await db.youtube_videos.findUnique({ where: { id } })
+      videoExists = await db.youtube_videos.findUnique({ where: { id } })
+      span.setAttribute(`videoExists`, !!videoExists)
       if (videoExists === null) {
-        await trpc.createVideo.mutate({ id })
+        await tracer.startActiveSpan(
+          `trpc.createVideo`,
+          {},
+          ctx,
+          async (span) => {
+            await trpc.createVideo.mutate({ id })
+            span.end()
+          }
+        )
       }
     } else {
       throw new Error(`Not a valid YouTube URL`)
     }
 
-    return id
+    return { id, videoExists: !!videoExists }
   }
 }
 

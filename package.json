@@ -17,6 +17,11 @@
     "@fontsource/rokkitt": "^5.0.18",
     "@fontsource/source-sans-pro": "^5.0.8",
     "@mui/material": "^5.14.20",
+    "@opentelemetry/api": "^1.7.0",
+    "@opentelemetry/auto-instrumentations-web": "^0.33.2",
+    "@opentelemetry/context-zone": "^1.19.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.46.0",
+    "@opentelemetry/sdk-trace-web": "^1.19.0",
     "@prisma/client": "4.8.1",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -39,6 +44,7 @@
     "get-youtube-id": "^1.0.1",
     "langchain": "^0.0.191",
     "lodash": "^4.17.21",
+    "partysocket": "0.0.17",
     "pg": "^8.11.3",
     "prettier": "^3.1.1",
     "prisma": "4.8.1",
@@ -56,8 +62,7 @@
     "vite": "^5.0.8",
     "wa-sqlite": "rhashimoto/wa-sqlite#master",
     "youtube-metadata-from-url": "^1.0.3",
-    "youtube-transcript": "^1.0.6",
-    "partysocket": "0.0.17"
+    "youtube-transcript": "^1.0.6"
   },
   "homepage": "https://github.com/KyleAMathews/vite-react-router-electric-sql-starter#readme",
   "keywords": [
@@ -90,7 +95,7 @@
   },
   "devDependencies": {
     "@simbathesailor/use-what-changed": "^2.0.0",
-    "vitest": "^1.0.4",
-    "partykit": "0.0.45"
+    "partykit": "0.0.45",
+    "vitest": "^1.0.4"
   }
 }

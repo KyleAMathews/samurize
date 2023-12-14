@@ -1,0 +1,25 @@
+receivers:
+ otlp:
+   protocols:
+     http:
+       endpoint: "0.0.0.0:4318"
+       cors:
+         allowed_origins:
+           - http://localhost:5173
+           - http://localhost:5174
+processors:
+ batch:
+exporters:
+ otlp/honeycomb:
+   endpoint: "api.honeycomb.io:443"
+   headers:
+     "x-honeycomb-team": ${env:HONEYCOMB_API_KEY}
+     "x-honeycomb-dataset": ${env:HONEYCOMB_DATASET}
+ debug:
+   verbosity: detailed
+service:
+ pipelines:
+   traces:
+     receivers: [otlp]
+     processors: [batch]
+     exporters: [otlp/honeycomb]

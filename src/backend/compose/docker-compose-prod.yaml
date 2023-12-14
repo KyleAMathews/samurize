@@ -55,6 +55,26 @@ services:
       caddy.reverse_proxy: "{{upstreams http 5133}}"
     depends_on:
       - postgres
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    networks:
+      - caddy
+    ports:
+      - 1888:1888 # pprof extension
+      - 8888:8888 # Prometheus metrics exposed by the Collector
+      - 8889:8889 # Prometheus exporter metrics
+      - 13133:13133 # health_check extension
+      - 4317:4317 # OTLP gRPC receiver
+      - 4318:4318 # OTLP http receiver
+      - 55679:55679 # zpages extension
+    labels:
+      caddy: "${ELECTRIC_PRODUCTION_DOMAIN:-example.com}"
+      caddy.reverse_proxy: /v1/traces "{{upstreams http 4318}}"
+    environment:
+      HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
+      HONEYCOMB_DATASET: ${HONEYCOMB_DATASET}
   caddy:
     image: lucaslorentz/caddy-docker-proxy:ci-alpine
     ports:
