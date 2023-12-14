@@ -8,6 +8,7 @@ receivers:
            - http://localhost:5173
            - http://localhost:5174
            - https://samurize.kyleamathews.partykit.dev
+           - https://samurize.shannon-soper.com/
 processors:
  batch:
 exporters:
