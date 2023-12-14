@@ -41,6 +41,7 @@ export const appRouter = router({
         },
       } = opts
 
+      console.log(`createVideo`, input.id)
       let info = {}
       try {
         info = await getTranscriptAndMetadata(input.id)
@@ -73,6 +74,7 @@ export const appRouter = router({
         },
       } = opts
 
+      console.log(`basic-summary`, input.id)
       const video = await db.youtube_videos.findUnique({
         where: { id: input.id },
       })

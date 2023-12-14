@@ -1,7 +1,6 @@
 import { makeLLMCall } from "./make-llm-call"
 
 export async function createVideoPitch({ summary }) {
-  console.log(summary)
   const summaryChunksStr = JSON.parse(
     summary.hour_summaries
   )[0].chunkSummaries.join(`\n\n`)
