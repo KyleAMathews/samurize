@@ -38,9 +38,9 @@ export default function Index() {
 
           if (!error && id) {
             setErrorMessage(null)
-            navigate(`/video/${id}`)
-            await trpc.youtubeBasicSummary.mutate({ id })
+            trpc.youtubeBasicSummary.mutate({ id })
             form.reset()
+            navigate(`/video/${id}`)
           } else if (error) {
             setErrorMessage(error.message)
           }

@@ -52,6 +52,7 @@ export const appRouter = router({
       info.transcript = JSON.stringify(info.transcript)
 
       transact(() => {
+        console.log(`finished createVideo`, input.id)
         return db.youtube_videos.create({
           data: {
             id: input.id,
