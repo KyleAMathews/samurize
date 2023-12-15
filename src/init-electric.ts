@@ -107,22 +107,9 @@ export async function initElectric(electricRef) {
   const conn = await ElectricDatabase.init(tabScopedDbName, sqliteWasm)
   const electric = await electrify(conn, schema, config)
   electricRef.value = electric
-  let isTable = false
-  // Try querying to see if the table we want exists already. If it does,
-  // we don't need to wait for syncing to do the initial render.
-  try {
-    await electric.db.trpc_calls.findMany()
-    isTable = true
-  } catch (e) {
-    // Nothing to do
-  }
 
-  if (isTable) {
-    // Start syncing but don't block rendering the app on it.
-    Promise.resolve().then(() => syncTables(electric))
-  } else {
-    await syncTables(electric)
-  }
+  // Start syncing but don't block rendering the app on it.
+  Promise.resolve().then(() => syncTables(electric))
 
   return electric
 }
