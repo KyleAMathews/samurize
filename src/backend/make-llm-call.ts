@@ -9,7 +9,8 @@ export function makeLLMCall({
 }) {
   return sdk.post_chat_completions({
     // model: `openhermes-2-mistral-7b`,
-    model: `mistral-7b-instruct`,
+    // model: `mistral-7b-instruct`,
+    model: `mixtral-8x7b-instruct`,
     // model: `pplx-7b-chat`,
     messages: [
       {

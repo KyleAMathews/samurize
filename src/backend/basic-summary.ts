@@ -8,6 +8,7 @@ async function summarizeChunk(chunk, i, updateProgress, progressAmount) {
     response = await sdk.post_chat_completions({
       // model: `openhermes-2-mistral-7b`,
       model: `mistral-7b-instruct`,
+      // model: `mixtral-8x7b-instruct`,
       messages: [
         {
           role: `system`,
@@ -33,7 +34,8 @@ async function reduceChunks(chunks) {
   let response
   try {
     response = await sdk.post_chat_completions({
-      model: `mistral-7b-instruct`,
+      // model: `mistral-7b-instruct`,
+      model: `mixtral-8x7b-instruct`,
       messages: [
         {
           role: `system`,
