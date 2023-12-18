@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
-import Button from "@mui/material/Button"
+import LoadingButton from "@mui/lab/LoadingButton"
 import TextField from "@mui/material/TextField"
 import { Helmet } from "react-helmet-async"
 import { trpc } from "../trpc"
@@ -16,6 +16,7 @@ export default function Index() {
   const createVideo = useCreateYoutubeVideo()
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   return (
     <Stack spacing={1} p={2} maxWidth={600} margin="auto">
@@ -25,6 +26,7 @@ export default function Index() {
       <form
         onSubmit={async (e) => {
           await tracer.startActiveSpan(`createVideo`, async (span) => {
+            setLoading(true)
             e.preventDefault()
             const form = e.currentTarget
             const formData = new FormData(form)
@@ -64,6 +66,7 @@ export default function Index() {
               span.recordException(error)
               span.end()
               setErrorMessage(error.message)
+              setLoading(false)
             }
           })
         }}
@@ -79,9 +82,9 @@ export default function Index() {
             placeholder="YouTube url"
             helperText={errorMessage}
           />
-          <Button variant="outlined" type="submit">
+          <LoadingButton variant="outlined" type="submit" loading={loading}>
             Samurize
-          </Button>
+          </LoadingButton>
         </Stack>
       </form>
       <Stack spacing={1}>
