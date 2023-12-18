@@ -47,18 +47,6 @@ export default function Index() {
 
             if (!error && id) {
               setErrorMessage(null)
-              // First time we've seen this video so let's kickoff the summarization.
-              if (!videoExists) {
-                tracer.startActiveSpan(
-                  `trpc.youtubeBasicSummary`,
-                  { attributes: { youtubeId: id } },
-                  ctx,
-                  async (span) => {
-                    await trpc.youtubeBasicSummary.mutate({ id })
-                    span.end()
-                  }
-                )
-              }
               span.end()
               navigate(`/video/${id}`)
             } else if (error) {

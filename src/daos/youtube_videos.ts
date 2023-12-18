@@ -7,6 +7,16 @@ import { routeCache } from "./cache"
 import { tracer } from "../utils/tracer"
 import { trace, context } from "@opentelemetry/api"
 
+async function videoTitleToExist({ db, id }) {
+  let video = await db.youtube_videos.findUnique({ where: { id } })
+
+  while (typeof video?.title !== `string`) {
+    video = await db.youtube_videos.findUnique({ where: { id } })
+  }
+
+  return video
+}
+
 export function useCreateYoutubeVideo() {
   const { db } = useElectric()!
   return async (url: string) => {
@@ -25,7 +35,8 @@ export function useCreateYoutubeVideo() {
           {},
           ctx,
           async (span) => {
-            await trpc.createVideo.mutate({ id })
+            trpc.createVideo.mutate({ id })
+            await videoTitleToExist({ db, id })
             span.end()
           }
         )

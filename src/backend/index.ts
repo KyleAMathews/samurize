@@ -12,6 +12,8 @@ import { getTranscriptAndMetadata } from "./youtube-info"
 import { cleanupTranscript } from "./cleanup-transcript"
 import { createVideoPitch } from "./why-watch-video"
 import { promptPlayground } from "./prompt-playground"
+import { YoutubeTranscript } from "youtube-transcript"
+const youtube = require(`youtube-metadata-from-url`)
 
 /**
  * Initialization of tRPC backend
@@ -50,26 +52,99 @@ export const appRouter = router({
       if (video) {
         return
       } else {
-        let info = {}
+        let video = {}
         try {
-          info = await getTranscriptAndMetadata(input.id)
-        } catch (e) {
-          console.log(`error getting video transcript/metadata`, e)
-          throw new TRPCError({ error: e })
-        }
-        info.transcript = JSON.stringify(info.transcript)
-
-        transact(() => {
-          console.log(`finished createVideo`, input.id)
-          return db.youtube_videos.create({
+          const metadata = await youtube.metadata(
+            `https://www.youtube.com/watch?v=${input.id}`
+          )
+          video = await db.youtube_videos.create({
             data: {
               id: input.id,
               created_at: new Date(),
               updated_at: new Date(),
               score: 0.1,
-              ...info,
+              ...metadata,
             },
           })
+          const transcript = await YoutubeTranscript.fetchTranscript(input.id)
+          video = await db.youtube_videos.update({
+            data: {
+              transcript: JSON.stringify(transcript),
+              updated_at: new Date(),
+            },
+            where: {
+              id: input.id,
+            },
+          })
+        } catch (e) {
+          console.log(`error getting video transcript/metadata`, e)
+          throw new TRPCError({ error: e })
+        }
+
+        let progress = 0.1
+        function updateProgress({
+          increment,
+          value,
+        }: {
+          increment?: number
+          value?: number
+        }) {
+          if (increment) {
+            progress = progress + increment
+          } else {
+            progress = value
+          }
+          db.youtube_videos.update({
+            data: {
+              score: progress,
+              updated_at: new Date(),
+            },
+            where: {
+              id: input.id,
+            },
+          })
+        }
+
+        const chunks = chunk(JSON.parse(video.transcript), true)
+        console.log(`chunks length`, chunks.length)
+        const hourSummaries = await summarizeChunks(chunks, updateProgress)
+        updateProgress({ value: 0.9 })
+
+        // TODO for speed, could refactor this call to be done in parallel with the
+        // whole video summary call.
+        const response = await createVideoPitch({
+          summary: { hour_summaries: JSON.stringify(hourSummaries) },
+        })
+
+        transact(() => {
+          Promise.all([
+            db.youtube_videos.update({
+              data: {
+                score: 1,
+                updated_at: new Date(),
+              },
+              where: {
+                id: input.id,
+              },
+            }),
+            db.youtube_llm_outputs.create({
+              data: {
+                id: genUUID(),
+                youtube_id: input.id,
+                created_at: new Date(),
+                llm_prompt_type: `whyWatchVideo`,
+                output: JSON.stringify(response),
+              },
+            }),
+            db.youtube_basic_summary.create({
+              data: {
+                id: genUUID(),
+                youtube_id: input.id,
+                created_at: new Date(),
+                hour_summaries: JSON.stringify(hourSummaries),
+              },
+            }),
+          ])
         })
       }
     }),
@@ -105,6 +180,7 @@ export const appRouter = router({
         db.youtube_videos.update({
           data: {
             score: progress,
+            updated_at: new Date(),
           },
           where: {
             id: input.id,

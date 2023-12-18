@@ -95,12 +95,32 @@ function WhyWatchVideo({ outputs }) {
   }
 }
 
+function Body({ video, summaries, outputs }) {
+  const transcript = JSON.parse(video.transcript)
+  const endOffset = transcript.slice(-1)[0].offset / 1000 / 60
+
+  return (
+    <>
+      <WhyWatchVideo outputs={outputs} />
+      {summaries && summaries.slice(-1)[0]?.hour_summaries && (
+        <Stack>
+          <Typography variant="h2" mb={1}>
+            Summary
+          </Typography>
+          <Summaries
+            hourSummaries={JSON.parse(summaries.slice(-1)[0].hour_summaries)}
+            endOffset={endOffset}
+          />
+        </Stack>
+      )}
+    </>
+  )
+}
+
 export default function Video() {
   const { videoId } = useParams()
   const { video, summaries, outputs } = useVideo(videoId)
 
-  const transcript = JSON.parse(video.transcript)
-  const endOffset = transcript.slice(-1)[0].offset / 1000 / 60
   return (
     <Stack p={2} maxWidth={600} margin="auto">
       <Helmet>
@@ -117,22 +137,7 @@ export default function Video() {
         </MLink>
       </Box>
       {video.score === 1 || video.score === null ? (
-        <>
-          <WhyWatchVideo outputs={outputs} />
-          {summaries && summaries.slice(-1)[0]?.hour_summaries && (
-            <Stack>
-              <Typography variant="h2" mb={1}>
-                Summary
-              </Typography>
-              <Summaries
-                hourSummaries={JSON.parse(
-                  summaries.slice(-1)[0].hour_summaries
-                )}
-                endOffset={endOffset}
-              />
-            </Stack>
-          )}
-        </>
+        <Body video={video} summaries={summaries} outputs={outputs} />
       ) : (
         <Box sx={{ width: `100%` }}>
           <LinearProgress variant="determinate" value={video.score * 100} />
