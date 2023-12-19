@@ -1,3 +1,4 @@
+import { LIB_VERSION } from "electric-sql/version"
 import { ElectricDatabase, electrify } from "electric-sql/wa-sqlite"
 import { uniqueTabId } from "electric-sql/util"
 import { authToken } from "./auth"
@@ -43,6 +44,8 @@ class PromiseTracker {
 }
 
 const tracker = new PromiseTracker()
+const { tabId } = uniqueTabId()
+const dbName = `samurizer-${LIB_VERSION}-${tabId}.db`
 
 declare const ELECTRIC_URL: string
 const electricUrl =
@@ -51,6 +54,18 @@ const electricUrl =
     : `wss://${ELECTRIC_URL}`
 
 console.log({ electricUrl })
+
+function deleteDB() {
+  console.log(`Deleting DB as schema doesn't match server's`)
+  const DBDeleteRequest = window.indexedDB.deleteDatabase(dbName)
+  DBDeleteRequest.onsuccess = function () {
+    console.log(`Database deleted successfully`)
+  }
+  // the indexedDB cannot be deleted if the database connection is still open,
+  // so we need to reload the page to close any open connections.
+  // On reload, the database will be recreated.
+  window.location.reload()
+}
 
 async function syncTables(electric) {
   await tracer.startActiveSpan(`syncTables`, {}, async (span) => {
@@ -86,6 +101,7 @@ async function syncTables(electric) {
       span.end()
     } catch (error) {
       console.log(`initial electric sync failed`, error)
+      deleteDB()
     }
   })
 }
@@ -101,10 +117,8 @@ export async function initElectric(electricRef) {
   }
 
   console.time(`sync`)
-  const { tabId } = uniqueTabId()
-  const tabScopedDbName = `electric-${tabId}.db`
 
-  const conn = await ElectricDatabase.init(tabScopedDbName, sqliteWasm)
+  const conn = await ElectricDatabase.init(dbName, sqliteWasm)
   const electric = await electrify(conn, schema, config)
   electricRef.value = electric
 

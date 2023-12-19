@@ -1,6 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server"
 import { z } from "zod"
 import Database from "better-sqlite3"
+import fs from "fs"
 const { electrify } = require(`electric-sql/node`)
 const { authToken } = require(`../auth`)
 const { schema } = require(`../generated/client`)
@@ -78,7 +79,7 @@ export const appRouter = router({
           })
         } catch (e) {
           console.log(`error getting video transcript/metadata`, e)
-          throw new TRPCError({ error: e })
+          throw new TRPCError({ code: `BAD_REQUEST`, message: e.message })
         }
 
         let progress = 0.1
@@ -341,7 +342,9 @@ async function setupTRPC() {
     // url: ELECTRIC_URL,
   }
 
-  // Create the better-sqlite3 database connection.
+  // Create the better-sqlite3 database connection anew.
+  // Always delete to avoid syncing errors (crude but effective).
+  fs.unlinkSync(`./local-data.db`)
   const conn = new Database(`local-data.db`)
   conn.pragma(`journal_mode = WAL`)
 
