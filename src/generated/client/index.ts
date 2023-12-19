@@ -24,7 +24,7 @@ export const Youtube_basic_summaryScalarFieldEnumSchema = z.enum(['id','youtube_
 
 export const Youtube_llm_outputsScalarFieldEnumSchema = z.enum(['id','youtube_id','created_at','llm_prompt_type','output']);
 
-export const Youtube_videosScalarFieldEnumSchema = z.enum(['id','transcript','created_at','updated_at','title','author_name','author_url','type','height','width','version','provider_name','provider_url','thumbnail_height','thumbnail_width','thumbnail_url','html','score']);
+export const Youtube_videosScalarFieldEnumSchema = z.enum(['id','transcript','created_at','updated_at','title','author_name','author_url','type','height','width','version','provider_name','provider_url','thumbnail_height','thumbnail_width','thumbnail_url','html','score','error']);
 /////////////////////////////////////////
 // MODELS
 /////////////////////////////////////////
@@ -97,6 +97,7 @@ export const Youtube_videosSchema = z.object({
   thumbnail_url: z.string().nullable(),
   html: z.string().nullable(),
   score: z.number().or(z.nan()).nullable(),
+  error: z.string().nullable(),
 })
 
 export type Youtube_videos = z.infer<typeof Youtube_videosSchema>
@@ -203,6 +204,7 @@ export const Youtube_videosSelectSchema: z.ZodType<Prisma.Youtube_videosSelect> 
   thumbnail_url: z.boolean().optional(),
   html: z.boolean().optional(),
   score: z.boolean().optional(),
+  error: z.boolean().optional(),
   youtube_basic_summary: z.union([z.boolean(),z.lazy(() => Youtube_basic_summaryFindManyArgsSchema)]).optional(),
   youtube_llm_outputs: z.union([z.boolean(),z.lazy(() => Youtube_llm_outputsFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => Youtube_videosCountOutputTypeArgsSchema)]).optional(),
@@ -388,6 +390,7 @@ export const Youtube_videosWhereInputSchema: z.ZodType<Prisma.Youtube_videosWher
   thumbnail_url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   html: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   score: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  error: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryListRelationFilterSchema).optional(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsListRelationFilterSchema).optional()
 }).strict();
@@ -411,6 +414,7 @@ export const Youtube_videosOrderByWithRelationInputSchema: z.ZodType<Prisma.Yout
   thumbnail_url: z.lazy(() => SortOrderSchema).optional(),
   html: z.lazy(() => SortOrderSchema).optional(),
   score: z.lazy(() => SortOrderSchema).optional(),
+  error: z.lazy(() => SortOrderSchema).optional(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryOrderByRelationAggregateInputSchema).optional(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsOrderByRelationAggregateInputSchema).optional()
 }).strict();
@@ -438,6 +442,7 @@ export const Youtube_videosOrderByWithAggregationInputSchema: z.ZodType<Prisma.Y
   thumbnail_url: z.lazy(() => SortOrderSchema).optional(),
   html: z.lazy(() => SortOrderSchema).optional(),
   score: z.lazy(() => SortOrderSchema).optional(),
+  error: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => Youtube_videosCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => Youtube_videosAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => Youtube_videosMaxOrderByAggregateInputSchema).optional(),
@@ -467,6 +472,7 @@ export const Youtube_videosScalarWhereWithAggregatesInputSchema: z.ZodType<Prism
   thumbnail_url: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   html: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   score: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  error: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
 export const Trpc_callsCreateInputSchema: z.ZodType<Prisma.Trpc_callsCreateInput> = z.object({
@@ -675,6 +681,7 @@ export const Youtube_videosCreateInputSchema: z.ZodType<Prisma.Youtube_videosCre
   thumbnail_url: z.string().optional().nullable(),
   html: z.string().optional().nullable(),
   score: z.number().or(z.nan()).optional().nullable(),
+  error: z.string().optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryCreateNestedManyWithoutYoutube_videosInputSchema).optional(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsCreateNestedManyWithoutYoutube_videosInputSchema).optional()
 }).strict();
@@ -698,6 +705,7 @@ export const Youtube_videosUncheckedCreateInputSchema: z.ZodType<Prisma.Youtube_
   thumbnail_url: z.string().optional().nullable(),
   html: z.string().optional().nullable(),
   score: z.number().or(z.nan()).optional().nullable(),
+  error: z.string().optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryUncheckedCreateNestedManyWithoutYoutube_videosInputSchema).optional(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsUncheckedCreateNestedManyWithoutYoutube_videosInputSchema).optional()
 }).strict();
@@ -721,6 +729,7 @@ export const Youtube_videosUpdateInputSchema: z.ZodType<Prisma.Youtube_videosUpd
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryUpdateManyWithoutYoutube_videosNestedInputSchema).optional(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsUpdateManyWithoutYoutube_videosNestedInputSchema).optional()
 }).strict();
@@ -744,6 +753,7 @@ export const Youtube_videosUncheckedUpdateInputSchema: z.ZodType<Prisma.Youtube_
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryUncheckedUpdateManyWithoutYoutube_videosNestedInputSchema).optional(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsUncheckedUpdateManyWithoutYoutube_videosNestedInputSchema).optional()
 }).strict();
@@ -766,7 +776,8 @@ export const Youtube_videosCreateManyInputSchema: z.ZodType<Prisma.Youtube_video
   thumbnail_width: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   thumbnail_url: z.string().optional().nullable(),
   html: z.string().optional().nullable(),
-  score: z.number().or(z.nan()).optional().nullable()
+  score: z.number().or(z.nan()).optional().nullable(),
+  error: z.string().optional().nullable()
 }).strict();
 
 export const Youtube_videosUpdateManyMutationInputSchema: z.ZodType<Prisma.Youtube_videosUpdateManyMutationInput> = z.object({
@@ -788,6 +799,7 @@ export const Youtube_videosUpdateManyMutationInputSchema: z.ZodType<Prisma.Youtu
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const Youtube_videosUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Youtube_videosUncheckedUpdateManyInput> = z.object({
@@ -809,6 +821,7 @@ export const Youtube_videosUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Yout
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const UuidFilterSchema: z.ZodType<Prisma.UuidFilter> = z.object({
@@ -1124,7 +1137,8 @@ export const Youtube_videosCountOrderByAggregateInputSchema: z.ZodType<Prisma.Yo
   thumbnail_width: z.lazy(() => SortOrderSchema).optional(),
   thumbnail_url: z.lazy(() => SortOrderSchema).optional(),
   html: z.lazy(() => SortOrderSchema).optional(),
-  score: z.lazy(() => SortOrderSchema).optional()
+  score: z.lazy(() => SortOrderSchema).optional(),
+  error: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const Youtube_videosAvgOrderByAggregateInputSchema: z.ZodType<Prisma.Youtube_videosAvgOrderByAggregateInput> = z.object({
@@ -1153,7 +1167,8 @@ export const Youtube_videosMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Yout
   thumbnail_width: z.lazy(() => SortOrderSchema).optional(),
   thumbnail_url: z.lazy(() => SortOrderSchema).optional(),
   html: z.lazy(() => SortOrderSchema).optional(),
-  score: z.lazy(() => SortOrderSchema).optional()
+  score: z.lazy(() => SortOrderSchema).optional(),
+  error: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const Youtube_videosMinOrderByAggregateInputSchema: z.ZodType<Prisma.Youtube_videosMinOrderByAggregateInput> = z.object({
@@ -1174,7 +1189,8 @@ export const Youtube_videosMinOrderByAggregateInputSchema: z.ZodType<Prisma.Yout
   thumbnail_width: z.lazy(() => SortOrderSchema).optional(),
   thumbnail_url: z.lazy(() => SortOrderSchema).optional(),
   html: z.lazy(() => SortOrderSchema).optional(),
-  score: z.lazy(() => SortOrderSchema).optional()
+  score: z.lazy(() => SortOrderSchema).optional(),
+  error: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const Youtube_videosSumOrderByAggregateInputSchema: z.ZodType<Prisma.Youtube_videosSumOrderByAggregateInput> = z.object({
@@ -1570,6 +1586,7 @@ export const Youtube_videosCreateWithoutYoutube_basic_summaryInputSchema: z.ZodT
   thumbnail_url: z.string().optional().nullable(),
   html: z.string().optional().nullable(),
   score: z.number().optional().nullable(),
+  error: z.string().optional().nullable(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsCreateNestedManyWithoutYoutube_videosInputSchema).optional()
 }).strict();
 
@@ -1592,6 +1609,7 @@ export const Youtube_videosUncheckedCreateWithoutYoutube_basic_summaryInputSchem
   thumbnail_url: z.string().optional().nullable(),
   html: z.string().optional().nullable(),
   score: z.number().optional().nullable(),
+  error: z.string().optional().nullable(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsUncheckedCreateNestedManyWithoutYoutube_videosInputSchema).optional()
 }).strict();
 
@@ -1624,6 +1642,7 @@ export const Youtube_videosUpdateWithoutYoutube_basic_summaryInputSchema: z.ZodT
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsUpdateManyWithoutYoutube_videosNestedInputSchema).optional()
 }).strict();
 
@@ -1646,6 +1665,7 @@ export const Youtube_videosUncheckedUpdateWithoutYoutube_basic_summaryInputSchem
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   youtube_llm_outputs: z.lazy(() => Youtube_llm_outputsUncheckedUpdateManyWithoutYoutube_videosNestedInputSchema).optional()
 }).strict();
 
@@ -1668,6 +1688,7 @@ export const Youtube_videosCreateWithoutYoutube_llm_outputsInputSchema: z.ZodTyp
   thumbnail_url: z.string().optional().nullable(),
   html: z.string().optional().nullable(),
   score: z.number().optional().nullable(),
+  error: z.string().optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryCreateNestedManyWithoutYoutube_videosInputSchema).optional()
 }).strict();
 
@@ -1690,6 +1711,7 @@ export const Youtube_videosUncheckedCreateWithoutYoutube_llm_outputsInputSchema:
   thumbnail_url: z.string().optional().nullable(),
   html: z.string().optional().nullable(),
   score: z.number().optional().nullable(),
+  error: z.string().optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryUncheckedCreateNestedManyWithoutYoutube_videosInputSchema).optional()
 }).strict();
 
@@ -1722,6 +1744,7 @@ export const Youtube_videosUpdateWithoutYoutube_llm_outputsInputSchema: z.ZodTyp
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryUpdateManyWithoutYoutube_videosNestedInputSchema).optional()
 }).strict();
 
@@ -1744,6 +1767,7 @@ export const Youtube_videosUncheckedUpdateWithoutYoutube_llm_outputsInputSchema:
   thumbnail_url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   html: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   score: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  error: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   youtube_basic_summary: z.lazy(() => Youtube_basic_summaryUncheckedUpdateManyWithoutYoutube_videosNestedInputSchema).optional()
 }).strict();
 
@@ -2560,6 +2584,10 @@ export const tableSchemas = {
       [
         "score",
         "FLOAT8"
+      ],
+      [
+        "error",
+        "TEXT"
       ]
     ]),
     relations: [

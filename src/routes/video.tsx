@@ -136,13 +136,14 @@ export default function Video() {
           Watch on YouTube
         </MLink>
       </Box>
-      {video.score === 1 || video.score === null ? (
+      {video.error !== null && <Box bgcolor="#ffeeee" color="#d8000c" border="4px solid #d8000c" fontSize={20} p={2}>{video.error}</Box>}
+      {video.error === null && (video.score === 1 || video.score === null ? (
         <Body video={video} summaries={summaries} outputs={outputs} />
       ) : (
         <Box sx={{ width: `100%` }}>
           <LinearProgress variant="determinate" value={video.score * 100} />
         </Box>
-      )}
+      ))}
     </Stack>
   )
 }

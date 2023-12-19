@@ -35,7 +35,18 @@ export function useCreateYoutubeVideo() {
           {},
           ctx,
           async (span) => {
-            trpc.createVideo.mutate({ id })
+            trpc.createVideo.mutate({ id }).catch((e) => {
+              console.log(e)
+              db.youtube_videos.update({
+                data: {
+                  error: e.message,
+                  updated_at: new Date(),
+                },
+                where: {
+                  id,
+                },
+              })
+            })
             await videoTitleToExist({ db, id })
             span.end()
           }
@@ -58,6 +69,7 @@ export const videoQueries = (db, { id }) => {
         author_name: true,
         transcript: true,
         score: true,
+        error: true,
       },
       where: { id },
     }),
