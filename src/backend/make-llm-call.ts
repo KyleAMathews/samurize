@@ -1,26 +1,24 @@
-import { sdk } from "./llm-api"
+import { sdk, mistralClient } from "./llm-api"
 
-export function makeLLMCall({
-  prompt,
-  data,
+export async function makeLLMCall({
+  messages,
+  model,
 }: {
-  prompt: string
-  data: string
+  model?: string
+  messages: Array<any>
 }) {
+  // const response = await mistralClient.chat({
+  // model: `mistral-medium`,
+  // messages,
+  // })
+  // console.log(`got response from mistral`)
+
+  // return { data: response }
   return sdk.post_chat_completions({
     // model: `openhermes-2-mistral-7b`,
     // model: `mistral-7b-instruct`,
-    model: `mixtral-8x7b-instruct`,
+    model: model || `mixtral-8x7b-instruct`,
     // model: `pplx-7b-chat`,
-    messages: [
-      {
-        role: `system`,
-        content: prompt,
-      },
-      {
-        role: `user`,
-        content: data,
-      },
-    ],
+    messages,
   })
 }

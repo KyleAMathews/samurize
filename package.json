@@ -16,6 +16,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@fontsource/rokkitt": "^5.0.18",
     "@fontsource/source-sans-pro": "^5.0.8",
+    "@mistralai/mistralai": "^0.0.7",
     "@mui/lab": "^5.0.0-alpha.156",
     "@mui/material": "^5.15.0",
     "@opentelemetry/api": "^1.7.0",

@@ -5,7 +5,7 @@ import { sdk } from "./llm-api"
 async function summarizeChunk(chunk, i, updateProgress, progressAmount) {
   let response
   try {
-    response = await sdk.post_chat_completions({
+    response = await makeLLMCall({
       // model: `openhermes-2-mistral-7b`,
       model: `mistral-7b-instruct`,
       // model: `mixtral-8x7b-instruct`,
@@ -33,9 +33,9 @@ async function summarizeChunk(chunk, i, updateProgress, progressAmount) {
 async function reduceChunks(chunks) {
   let response
   try {
-    response = await sdk.post_chat_completions({
+    response = await makeLLMCall({
       // model: `mistral-7b-instruct`,
-      model: `mixtral-8x7b-instruct`,
+      // model: `mixtral-8x7b-instruct`,
       messages: [
         {
           role: `system`,
