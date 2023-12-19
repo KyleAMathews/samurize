@@ -37,6 +37,7 @@ export function useCreateYoutubeVideo() {
           async (span) => {
             trpc.createVideo.mutate({ id }).catch((e) => {
               console.log(e)
+              span.recordException(e)
               db.youtube_videos.update({
                 data: {
                   error: e.message,
