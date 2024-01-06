@@ -221,9 +221,14 @@ export async function electricSqlLoader({
     await Promise.all(syncPromises.map((shape) => shape.synced))
   }
 
-  const isReadies = await Promise.all(
-    resolvedShapes.map((shape) => shape.isReady({ db }))
-  )
+  let isReadies = [false]
+  try {
+    isReadies = await Promise.all(
+      resolvedShapes.map((shape) => shape.isReady())
+    )
+  } catch (e) {
+    console.log(`a isReady failed... so probably it's not ready`, e)
+  }
 
   // Check if all isReadies are true
   if (isReadies.every((isReady) => isReady === true)) {
