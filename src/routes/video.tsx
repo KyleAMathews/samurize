@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useParams } from "react-router-dom"
-import { useVideo } from "../daos/youtube_videos"
+import { useLocation } from "react-router-dom"
+import { useElectricData } from "../electric-routes"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import MLink from "@mui/material/Link"
@@ -118,9 +118,12 @@ function Body({ video, summaries, outputs }) {
 }
 
 export default function Video() {
-  const { videoId } = useParams()
-  const { video, summaries, outputs } = useVideo(videoId)
+  const location = useLocation()
+  const { video, summaries, outputs } = useElectricData(
+    location.pathname + location.search
+  )
 
+  console.log({ video })
   return (
     <Stack p={2} maxWidth={600} margin="auto">
       <Helmet>
@@ -132,18 +135,63 @@ export default function Video() {
       <Box mb={3}>
         <MLink href={video.author_url}>{video.author_name}</MLink>
         {` | `}
-        <MLink href={`https://www.youtube.com/watch?v=${videoId}`}>
+        <MLink href={`https://www.youtube.com/watch?v=${video.id}`}>
           Watch on YouTube
         </MLink>
       </Box>
-      {video.error !== null && <Box bgcolor="#ffeeee" color="#d8000c" border="4px solid #d8000c" fontSize={20} p={2}>{video.error}</Box>}
-      {video.error === null && (video.score === 1 || video.score === null ? (
-        <Body video={video} summaries={summaries} outputs={outputs} />
-      ) : (
-        <Box sx={{ width: `100%` }}>
-          <LinearProgress variant="determinate" value={video.score * 100} />
+      {video.error !== null && (
+        <Box
+          bgcolor="#ffeeee"
+          color="#d8000c"
+          border="4px solid #d8000c"
+          fontSize={20}
+          p={2}
+        >
+          {video.error}
         </Box>
-      ))}
+      )}
+      {video.error === null &&
+        (video.score === 1 || video.score === null ? (
+          <Body video={video} summaries={summaries} outputs={outputs} />
+        ) : (
+          <Box sx={{ width: `100%` }}>
+            <LinearProgress variant="determinate" value={video.score * 100} />
+          </Box>
+        ))}
     </Stack>
   )
 }
+
+const queries = ({ db, id }) => {
+  return {
+    video: db.youtube_videos.liveUnique({
+      select: {
+        id: true,
+        title: true,
+        author_url: true,
+        author_name: true,
+        transcript: true,
+        score: true,
+        error: true,
+      },
+      where: { id },
+    }),
+    summaries: db.youtube_basic_summary.liveMany({
+      where: { youtube_id: id },
+      orderBy: { created_at: `asc` },
+    }),
+    outputs: db.liveRaw({
+      sql: `SELECT t1.*
+FROM youtube_llm_outputs t1
+INNER JOIN (
+    SELECT llm_prompt_type, MAX(created_at) AS latest
+    FROM youtube_llm_outputs
+    WHERE youtube_id = ?
+    GROUP BY llm_prompt_type
+) t2 ON t1.llm_prompt_type = t2.llm_prompt_type AND t1.created_at = t2.latest;`,
+      args: [id],
+    }),
+  }
+}
+
+Video.queries = queries
