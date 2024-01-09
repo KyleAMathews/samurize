@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useLocation } from "react-router-dom"
-import { useElectricData } from "../electric-routes"
+import { useElectricData } from "electric-query"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import MLink from "@mui/material/Link"

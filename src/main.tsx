@@ -3,9 +3,11 @@ import ReactDOM from "react-dom/client"
 import "./index.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import ErrorPage from "./error-page"
-import { initElectric, electricSqlLoader } from "./electric-routes"
+import { initElectric, electricSqlLoader } from "electric-query"
+import sqliteWasm from "wa-sqlite/dist/wa-sqlite-async.wasm?asset"
+import { Electric, schema } from "./generated/client"
+import { electricRef } from "./trpc"
 import { ElectricalProvider } from "./context"
-import { electricRef } from "./electric-routes"
 import CssBaseline from "@mui/material/CssBaseline"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import * as typographyStyles from "./utils/typography"
@@ -110,7 +112,7 @@ const router = createBrowserRouter([
         loader: async (props) => {
           const url = new URL(props.request.url)
           const key = url.pathname + url.search
-          await electricSqlLoader({
+          await electricSqlLoader<Electric>({
             key,
             shapes: ({ db }) => [
               {
@@ -142,24 +144,6 @@ const router = createBrowserRouter([
 
           return null
         },
-
-        // loader: async (props) => {
-        // const params = props.params
-        // await areTablesSynced([
-        // `youtube_videos`,
-        // `youtube_llm_outputs`,
-        // `youtube_basic_summary`,
-        // ])
-
-        // // Warm cache for route queries
-        // const queries = videoQueries(electricRef.value.db, {
-        // id: params.videoId,
-        // })
-        // const queryResults = await transformQueriesObject(queries)
-        // routeCache.set(new URL(props.request.url).pathname, queryResults)
-
-        // return null
-        // },
       },
       {
         path: `/prompt-playground`,
@@ -176,17 +160,20 @@ const electricUrl =
     : `wss://${ELECTRIC_URL}`
 
 const token = authToken()
-const config = {
-  appName: `samurize`,
-  auth: {
-    token: token,
-  },
-  debug: false, //DEBUG_MODE,
-  url: electricUrl,
-}
-
 async function render() {
-  const electric = await initElectric(config)
+  const electric = await initElectric({
+    appName: `samurize`,
+    schema,
+    sqliteWasmPath: sqliteWasm,
+    config: {
+      auth: {
+        token,
+      },
+      debug: false, //DEBUG_MODE,
+      url: electricUrl,
+    },
+  })
+  electricRef.value = electric
   ReactDOM.createRoot(document.getElementById(`root`)!).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>
