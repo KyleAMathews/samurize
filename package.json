@@ -95,6 +95,6 @@
     "client:generate:prod": "npx electric-sql generate --service https://$ELECTRIC_URL --proxy $ELECTRIC_PROXY",
     "db:migrate": "node ./db/migrate.cjs",
     "db:psql": "node ./db/connect.cjs",
-    "dev": "cross-env NODE_ENV=development concurrently \"npx tsx watch src/backend/index.ts\" \"vite\""
+    "dev": "cross-env NODE_ENV=development concurrently \"npx sst dev\" \"vite\""
   }
 }
