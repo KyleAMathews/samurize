@@ -8,7 +8,6 @@ import ListItem from "@mui/material/ListItem"
 import LoadingButton from "@mui/lab/LoadingButton"
 import TextField from "@mui/material/TextField"
 import { Helmet } from "react-helmet-async"
-import { trpc } from "../trpc"
 import { tracer } from "../utils/tracer"
 import { context } from "@opentelemetry/api"
 

@@ -7,7 +7,6 @@ import MLink from "@mui/material/Link"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import LinearProgress from "@mui/material/LinearProgress"
-import { trpc } from "../trpc"
 import { Markdown } from "../components/markdown"
 import { Helmet } from "react-helmet-async"
 

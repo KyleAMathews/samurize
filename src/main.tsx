@@ -6,7 +6,6 @@ import ErrorPage from "./error-page"
 import { initElectric, electricSqlLoader } from "electric-query"
 import sqliteWasm from "wa-sqlite/dist/wa-sqlite-async.wasm?asset"
 import { Electric, schema } from "./generated/client"
-import { electricRef } from "./trpc"
 import { ElectricalProvider } from "./context"
 import CssBaseline from "@mui/material/CssBaseline"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
@@ -93,7 +92,7 @@ console.log(theme)
 // Routes
 import Root from "./routes/root"
 import Video from "./routes/video"
-import PromptPlayground from "./routes/prompt-playground"
+// import PromptPlayground from "./routes/prompt-playground"
 import Index from "./routes/_index"
 
 const router = createBrowserRouter([
@@ -161,10 +160,10 @@ const router = createBrowserRouter([
           return null
         },
       },
-      {
-        path: `/prompt-playground`,
-        element: <PromptPlayground />,
-      },
+      // {
+      // path: `/prompt-playground`,
+      // element: <PromptPlayground />,
+      // },
     ],
   },
 ])
@@ -189,7 +188,6 @@ async function render() {
       url: electricUrl,
     },
   })
-  electricRef.value = electric
   ReactDOM.createRoot(document.getElementById(`root`)!).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>
