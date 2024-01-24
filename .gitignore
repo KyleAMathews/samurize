@@ -132,3 +132,4 @@ local-data.db
 local-data.db-shm
 local-data.db-wal
 src/backend/compose/.envrc
+.sst

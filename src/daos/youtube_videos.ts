@@ -19,7 +19,11 @@ async function videoTitleToExist({ db, id }) {
 
 export function useCreateYoutubeVideo() {
   const { db } = useElectric()!
-  return async (url: string) => {
+  return async (
+    url: string,
+    setErrorMessage: Function,
+    setLoading: Function
+  ) => {
     const span = trace.getActiveSpan()!
     const ctx = context.active()
     const id = getYoutubeId(url)
@@ -30,23 +34,39 @@ export function useCreateYoutubeVideo() {
       videoExists = await db.youtube_videos.findUnique({ where: { id } })
       span.setAttribute(`videoExists`, !!videoExists)
       if (videoExists === null) {
+        const url = import.meta.env.PROD
+          ? `https://ykiefi3x29.execute-api.us-east-1.amazonaws.com/`
+          : `https://eyygvkenl2.execute-api.us-east-1.amazonaws.com/`
         await tracer.startActiveSpan(
           `trpc.createVideo`,
           {},
           ctx,
           async (span) => {
-            trpc.createVideo.mutate({ id }).catch((e) => {
-              console.log(e)
-              span.recordException(e)
-              db.youtube_videos.update({
-                data: {
-                  error: e.message,
-                  updated_at: new Date(),
-                },
-                where: {
-                  id,
-                },
-              })
+            fetch(`${url}?videoId=${id}`).then(async (response) => {
+              console.log({ response })
+              if (!response.ok) {
+                const error = await response.text()
+                console.log({ error })
+                span.recordException(error)
+                db.youtube_videos.upsert({
+                  create: {
+                    id,
+                    error: error,
+                    updated_at: new Date(),
+                  },
+                  update: {
+                    error: error,
+                    updated_at: new Date(),
+                  },
+                  where: {
+                    id,
+                  },
+                })
+
+                span.end()
+                setErrorMessage(error)
+                setLoading(false)
+              }
             })
             await videoTitleToExist({ db, id })
             span.end()

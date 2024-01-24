@@ -37,7 +37,11 @@ export default function Index() {
             const ctx = context.active()
 
             try {
-              const result = await createVideo(data.youtube_url.toString())
+              const result = await createVideo(
+                data.youtube_url.toString(),
+                setErrorMessage,
+                setLoading
+              )
               id = result.id
               videoExists = result.videoExists
             } catch (e) {

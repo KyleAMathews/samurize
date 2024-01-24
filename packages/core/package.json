@@ -1,0 +1,17 @@
+{
+  "name": "@samurize/core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest",
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "vitest": "^1.2.1",
+    "@types/node": "^20.11.6",
+    "sst": "^2.39.8"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}

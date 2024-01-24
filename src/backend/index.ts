@@ -344,7 +344,11 @@ async function setupTRPC() {
 
   // Create the better-sqlite3 database connection anew.
   // Always delete to avoid syncing errors (crude but effective).
-  fs.unlinkSync(`./local-data.db`)
+  try {
+    fs.unlinkSync(`./local-data.db`)
+  } catch (e) {
+    // ignore
+  }
   const conn = new Database(`local-data.db`)
   conn.pragma(`journal_mode = WAL`)
 

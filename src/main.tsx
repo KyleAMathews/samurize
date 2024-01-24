@@ -105,6 +105,22 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Index />,
+        loader: async (props) => {
+          const url = new URL(props.request.url)
+          const key = url.pathname + url.search
+          electricSqlLoader<Electric>({
+            key,
+            shapes: ({ db }) => [
+              {
+                shape: db.youtube_videos.sync(),
+                isReady: async () => !!(await db.youtube_videos.findFirst()),
+              },
+            ],
+            queries: ({ db }) => Video.queries({ db, id: `` }),
+          })
+
+          return null
+        },
       },
       {
         path: `/video/:videoId`,

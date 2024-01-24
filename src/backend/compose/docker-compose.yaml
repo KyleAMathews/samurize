@@ -26,7 +26,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - 5432
+      - 5432:5432
     volumes:
       - pg_data:/var/lib/postgresql/data
 
@@ -37,6 +37,7 @@ services:
       DATABASE_URL: postgresql://postgres:pg_password@postgres:5432/${APP_NAME:-electric}
       PG_PROXY_PASSWORD: proxy_password
       LOGICAL_PUBLISHER_HOST: electric
+      DATABASE_REQUIRE_SSL: false
       AUTH_MODE: insecure
     ports:
       - ${ELECTRIC_PORT:-5133}:5133
