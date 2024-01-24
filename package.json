@@ -35,7 +35,7 @@
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "electric-query": "^0.0.4",
-    "electric-sql": "^0.8.1",
+    "electric-sql": "^0.9.1",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-react": "^1.1.7",
