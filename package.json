@@ -92,7 +92,7 @@
     "build": "cross-env-shell ELECTRIC_URL=$ELECTRIC_URL ELECTRIC_PROXY=$ELECTRIC_PROXY \"npm run client:generate:prod && vite build\"",
     "cleanup-example-code": "node scripts/cleanup-example-code.js",
     "client:generate": "npx electric-sql generate --service http://localhost:5133",
-    "client:generate:prod": "npx electric-sql generate --service $ELECTRIC_URL --proxy $ELECTRIC_PROXY",
+    "client:generate:prod": "npx electric-sql generate --service https://$ELECTRIC_URL --proxy $ELECTRIC_PROXY",
     "db:migrate": "node ./db/migrate.cjs",
     "db:psql": "node ./db/connect.cjs",
     "dev": "cross-env NODE_ENV=development concurrently \"npx tsx watch src/backend/index.ts\" \"vite\""
