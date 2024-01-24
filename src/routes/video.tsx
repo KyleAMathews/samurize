@@ -123,7 +123,6 @@ export default function Video() {
     location.pathname + location.search
   )
 
-  console.log({ video })
   return (
     <Stack p={2} maxWidth={600} margin="auto">
       <Helmet>
