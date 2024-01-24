@@ -56,7 +56,6 @@
     "react-router": "^6.20.1",
     "react-router-dom": "^6.20.1",
     "shelljs": "^0.8.5",
-    "sst": "2.39.8",
     "trpc-electric-sql": "^0.1.1",
     "tsx": "^4.6.2",
     "typescript": "^5.3.3",
@@ -65,6 +64,12 @@
     "wa-sqlite": "rhashimoto/wa-sqlite#master",
     "youtube-metadata-from-url": "^1.0.3",
     "youtube-transcript": "^1.0.6"
+  },
+  "devDependencies": {
+    "@simbathesailor/use-what-changed": "^2.0.0",
+    "partykit": "0.0.45",
+    "sst": "2.39.8",
+    "vitest": "^1.0.4"
   },
   "homepage": "https://github.com/KyleAMathews/vite-react-router-electric-sql-starter#readme",
   "keywords": [
@@ -83,21 +88,16 @@
     "url": "git+https://github.com/KyleAMathews/vite-react-router-electric-sql-starter.git"
   },
   "scripts": {
-    "backend:start": "docker compose --env-file src/backend/compose/.envrc -f src/backend/compose/docker-compose.yaml up",
-    "backend:prod:start": "docker compose --env-file src/backend/compose/.envrc -f src/backend/compose/docker-compose-prod.yaml up --detach",
     "backend:down": "docker compose  --env-file src/backend/compose/.envrc -f src/backend/compose/docker-compose.yaml down --volumes",
+    "backend:prod:start": "docker compose --env-file src/backend/compose/.envrc -f src/backend/compose/docker-compose-prod.yaml up --detach",
+    "backend:start": "docker compose --env-file src/backend/compose/.envrc -f src/backend/compose/docker-compose.yaml up",
     "build": "cross-env-shell ELECTRIC_URL=$ELECTRIC_URL ELECTRIC_PROXY=$ELECTRIC_PROXY \"npm run client:generate:prod && vite build\"",
+    "cleanup-example-code": "node scripts/cleanup-example-code.js",
     "client:generate": "npx electric-sql generate --service http://localhost:5133",
     "client:generate:prod": "npx electric-sql generate --service $ELECTRIC_URL --proxy $ELECTRIC_PROXY",
     "db:migrate": "node ./db/migrate.cjs",
     "db:psql": "node ./db/connect.cjs",
-    "cleanup-example-code": "node scripts/cleanup-example-code.js",
     "dev": "cross-env NODE_ENV=development concurrently \"npx tsx watch src/backend/index.ts\" \"vite\"",
     "partykit:deploy": "partykit deploy"
-  },
-  "devDependencies": {
-    "@simbathesailor/use-what-changed": "^2.0.0",
-    "partykit": "0.0.45",
-    "vitest": "^1.0.4"
   }
 }
