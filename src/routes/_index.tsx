@@ -45,7 +45,7 @@ export default function Index() {
               videoExists = result.videoExists
             } catch (e) {
               error = e as Error
-              console.log(e)
+              console.log(`error`, e)
             }
 
             if (!error && id) {

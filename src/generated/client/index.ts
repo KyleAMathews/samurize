@@ -1934,7 +1934,7 @@ export const Trpc_callsFindFirstArgsSchema: z.ZodType<Prisma.Trpc_callsFindFirst
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Trpc_callsScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() 
 
 export const Trpc_callsFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Trpc_callsFindFirstOrThrowArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
@@ -1944,7 +1944,7 @@ export const Trpc_callsFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Trpc_callsFi
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Trpc_callsScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() 
 
 export const Trpc_callsFindManyArgsSchema: z.ZodType<Prisma.Trpc_callsFindManyArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
@@ -1954,7 +1954,7 @@ export const Trpc_callsFindManyArgsSchema: z.ZodType<Prisma.Trpc_callsFindManyAr
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Trpc_callsScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() 
 
 export const Trpc_callsAggregateArgsSchema: z.ZodType<Prisma.Trpc_callsAggregateArgs> = z.object({
   where: Trpc_callsWhereInputSchema.optional(),
@@ -1962,7 +1962,7 @@ export const Trpc_callsAggregateArgsSchema: z.ZodType<Prisma.Trpc_callsAggregate
   cursor: Trpc_callsWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() 
 
 export const Trpc_callsGroupByArgsSchema: z.ZodType<Prisma.Trpc_callsGroupByArgs> = z.object({
   where: Trpc_callsWhereInputSchema.optional(),
@@ -1971,17 +1971,17 @@ export const Trpc_callsGroupByArgsSchema: z.ZodType<Prisma.Trpc_callsGroupByArgs
   having: Trpc_callsScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() 
 
 export const Trpc_callsFindUniqueArgsSchema: z.ZodType<Prisma.Trpc_callsFindUniqueArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
   where: Trpc_callsWhereUniqueInputSchema,
-}).strict()
+}).strict() 
 
 export const Trpc_callsFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Trpc_callsFindUniqueOrThrowArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
   where: Trpc_callsWhereUniqueInputSchema,
-}).strict()
+}).strict() 
 
 export const Youtube_basic_summaryFindFirstArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryFindFirstArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
@@ -1992,7 +1992,7 @@ export const Youtube_basic_summaryFindFirstArgsSchema: z.ZodType<Prisma.Youtube_
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_basic_summaryScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryFindFirstArgs>
 
 export const Youtube_basic_summaryFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryFindFirstOrThrowArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
@@ -2003,7 +2003,7 @@ export const Youtube_basic_summaryFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Y
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_basic_summaryScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryFindFirstOrThrowArgs>
 
 export const Youtube_basic_summaryFindManyArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryFindManyArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
@@ -2014,7 +2014,7 @@ export const Youtube_basic_summaryFindManyArgsSchema: z.ZodType<Prisma.Youtube_b
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_basic_summaryScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryFindManyArgs>
 
 export const Youtube_basic_summaryAggregateArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryAggregateArgs> = z.object({
   where: Youtube_basic_summaryWhereInputSchema.optional(),
@@ -2022,7 +2022,7 @@ export const Youtube_basic_summaryAggregateArgsSchema: z.ZodType<Prisma.Youtube_
   cursor: Youtube_basic_summaryWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryAggregateArgs>
 
 export const Youtube_basic_summaryGroupByArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryGroupByArgs> = z.object({
   where: Youtube_basic_summaryWhereInputSchema.optional(),
@@ -2031,19 +2031,19 @@ export const Youtube_basic_summaryGroupByArgsSchema: z.ZodType<Prisma.Youtube_ba
   having: Youtube_basic_summaryScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryGroupByArgs>
 
 export const Youtube_basic_summaryFindUniqueArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryFindUniqueArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
   include: Youtube_basic_summaryIncludeSchema.optional(),
   where: Youtube_basic_summaryWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryFindUniqueArgs>
 
 export const Youtube_basic_summaryFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryFindUniqueOrThrowArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
   include: Youtube_basic_summaryIncludeSchema.optional(),
   where: Youtube_basic_summaryWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryFindUniqueOrThrowArgs>
 
 export const Youtube_llm_outputsFindFirstArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsFindFirstArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
@@ -2054,7 +2054,7 @@ export const Youtube_llm_outputsFindFirstArgsSchema: z.ZodType<Prisma.Youtube_ll
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_llm_outputsScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsFindFirstArgs>
 
 export const Youtube_llm_outputsFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsFindFirstOrThrowArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
@@ -2065,7 +2065,7 @@ export const Youtube_llm_outputsFindFirstOrThrowArgsSchema: z.ZodType<Prisma.You
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_llm_outputsScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsFindFirstOrThrowArgs>
 
 export const Youtube_llm_outputsFindManyArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsFindManyArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
@@ -2076,7 +2076,7 @@ export const Youtube_llm_outputsFindManyArgsSchema: z.ZodType<Prisma.Youtube_llm
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_llm_outputsScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsFindManyArgs>
 
 export const Youtube_llm_outputsAggregateArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsAggregateArgs> = z.object({
   where: Youtube_llm_outputsWhereInputSchema.optional(),
@@ -2084,7 +2084,7 @@ export const Youtube_llm_outputsAggregateArgsSchema: z.ZodType<Prisma.Youtube_ll
   cursor: Youtube_llm_outputsWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsAggregateArgs>
 
 export const Youtube_llm_outputsGroupByArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsGroupByArgs> = z.object({
   where: Youtube_llm_outputsWhereInputSchema.optional(),
@@ -2093,19 +2093,19 @@ export const Youtube_llm_outputsGroupByArgsSchema: z.ZodType<Prisma.Youtube_llm_
   having: Youtube_llm_outputsScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsGroupByArgs>
 
 export const Youtube_llm_outputsFindUniqueArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsFindUniqueArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
   include: Youtube_llm_outputsIncludeSchema.optional(),
   where: Youtube_llm_outputsWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsFindUniqueArgs>
 
 export const Youtube_llm_outputsFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsFindUniqueOrThrowArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
   include: Youtube_llm_outputsIncludeSchema.optional(),
   where: Youtube_llm_outputsWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsFindUniqueOrThrowArgs>
 
 export const Youtube_videosFindFirstArgsSchema: z.ZodType<Prisma.Youtube_videosFindFirstArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
@@ -2116,7 +2116,7 @@ export const Youtube_videosFindFirstArgsSchema: z.ZodType<Prisma.Youtube_videosF
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_videosScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosFindFirstArgs>
 
 export const Youtube_videosFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Youtube_videosFindFirstOrThrowArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
@@ -2127,7 +2127,7 @@ export const Youtube_videosFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Youtube_
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_videosScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosFindFirstOrThrowArgs>
 
 export const Youtube_videosFindManyArgsSchema: z.ZodType<Prisma.Youtube_videosFindManyArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
@@ -2138,7 +2138,7 @@ export const Youtube_videosFindManyArgsSchema: z.ZodType<Prisma.Youtube_videosFi
   take: z.number().optional(),
   skip: z.number().optional(),
   distinct: Youtube_videosScalarFieldEnumSchema.array().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosFindManyArgs>
 
 export const Youtube_videosAggregateArgsSchema: z.ZodType<Prisma.Youtube_videosAggregateArgs> = z.object({
   where: Youtube_videosWhereInputSchema.optional(),
@@ -2146,7 +2146,7 @@ export const Youtube_videosAggregateArgsSchema: z.ZodType<Prisma.Youtube_videosA
   cursor: Youtube_videosWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosAggregateArgs>
 
 export const Youtube_videosGroupByArgsSchema: z.ZodType<Prisma.Youtube_videosGroupByArgs> = z.object({
   where: Youtube_videosWhereInputSchema.optional(),
@@ -2155,62 +2155,62 @@ export const Youtube_videosGroupByArgsSchema: z.ZodType<Prisma.Youtube_videosGro
   having: Youtube_videosScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosGroupByArgs>
 
 export const Youtube_videosFindUniqueArgsSchema: z.ZodType<Prisma.Youtube_videosFindUniqueArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
   include: Youtube_videosIncludeSchema.optional(),
   where: Youtube_videosWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosFindUniqueArgs>
 
 export const Youtube_videosFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Youtube_videosFindUniqueOrThrowArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
   include: Youtube_videosIncludeSchema.optional(),
   where: Youtube_videosWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosFindUniqueOrThrowArgs>
 
 export const Trpc_callsCreateArgsSchema: z.ZodType<Prisma.Trpc_callsCreateArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
   data: z.union([ Trpc_callsCreateInputSchema,Trpc_callsUncheckedCreateInputSchema ]),
-}).strict()
+}).strict() 
 
 export const Trpc_callsUpsertArgsSchema: z.ZodType<Prisma.Trpc_callsUpsertArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
   where: Trpc_callsWhereUniqueInputSchema,
   create: z.union([ Trpc_callsCreateInputSchema,Trpc_callsUncheckedCreateInputSchema ]),
   update: z.union([ Trpc_callsUpdateInputSchema,Trpc_callsUncheckedUpdateInputSchema ]),
-}).strict()
+}).strict() 
 
 export const Trpc_callsCreateManyArgsSchema: z.ZodType<Prisma.Trpc_callsCreateManyArgs> = z.object({
   data: Trpc_callsCreateManyInputSchema.array(),
   skipDuplicates: z.boolean().optional(),
-}).strict()
+}).strict() 
 
 export const Trpc_callsDeleteArgsSchema: z.ZodType<Prisma.Trpc_callsDeleteArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
   where: Trpc_callsWhereUniqueInputSchema,
-}).strict()
+}).strict() 
 
 export const Trpc_callsUpdateArgsSchema: z.ZodType<Prisma.Trpc_callsUpdateArgs> = z.object({
   select: Trpc_callsSelectSchema.optional(),
   data: z.union([ Trpc_callsUpdateInputSchema,Trpc_callsUncheckedUpdateInputSchema ]),
   where: Trpc_callsWhereUniqueInputSchema,
-}).strict()
+}).strict() 
 
 export const Trpc_callsUpdateManyArgsSchema: z.ZodType<Prisma.Trpc_callsUpdateManyArgs> = z.object({
   data: z.union([ Trpc_callsUpdateManyMutationInputSchema,Trpc_callsUncheckedUpdateManyInputSchema ]),
   where: Trpc_callsWhereInputSchema.optional(),
-}).strict()
+}).strict() 
 
 export const Trpc_callsDeleteManyArgsSchema: z.ZodType<Prisma.Trpc_callsDeleteManyArgs> = z.object({
   where: Trpc_callsWhereInputSchema.optional(),
-}).strict()
+}).strict() 
 
 export const Youtube_basic_summaryCreateArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryCreateArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
   include: Youtube_basic_summaryIncludeSchema.optional(),
   data: z.union([ Youtube_basic_summaryCreateInputSchema,Youtube_basic_summaryUncheckedCreateInputSchema ]),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryCreateArgs>
 
 export const Youtube_basic_summaryUpsertArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryUpsertArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
@@ -2218,40 +2218,40 @@ export const Youtube_basic_summaryUpsertArgsSchema: z.ZodType<Prisma.Youtube_bas
   where: Youtube_basic_summaryWhereUniqueInputSchema,
   create: z.union([ Youtube_basic_summaryCreateInputSchema,Youtube_basic_summaryUncheckedCreateInputSchema ]),
   update: z.union([ Youtube_basic_summaryUpdateInputSchema,Youtube_basic_summaryUncheckedUpdateInputSchema ]),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryUpsertArgs>
 
 export const Youtube_basic_summaryCreateManyArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryCreateManyArgs> = z.object({
   data: Youtube_basic_summaryCreateManyInputSchema.array(),
   skipDuplicates: z.boolean().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryCreateManyArgs>
 
 export const Youtube_basic_summaryDeleteArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryDeleteArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
   include: Youtube_basic_summaryIncludeSchema.optional(),
   where: Youtube_basic_summaryWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryDeleteArgs>
 
 export const Youtube_basic_summaryUpdateArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryUpdateArgs> = z.object({
   select: Youtube_basic_summarySelectSchema.optional(),
   include: Youtube_basic_summaryIncludeSchema.optional(),
   data: z.union([ Youtube_basic_summaryUpdateInputSchema,Youtube_basic_summaryUncheckedUpdateInputSchema ]),
   where: Youtube_basic_summaryWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryUpdateArgs>
 
 export const Youtube_basic_summaryUpdateManyArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryUpdateManyArgs> = z.object({
   data: z.union([ Youtube_basic_summaryUpdateManyMutationInputSchema,Youtube_basic_summaryUncheckedUpdateManyInputSchema ]),
   where: Youtube_basic_summaryWhereInputSchema.optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryUpdateManyArgs>
 
 export const Youtube_basic_summaryDeleteManyArgsSchema: z.ZodType<Prisma.Youtube_basic_summaryDeleteManyArgs> = z.object({
   where: Youtube_basic_summaryWhereInputSchema.optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_basic_summaryDeleteManyArgs>
 
 export const Youtube_llm_outputsCreateArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsCreateArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
   include: Youtube_llm_outputsIncludeSchema.optional(),
   data: z.union([ Youtube_llm_outputsCreateInputSchema,Youtube_llm_outputsUncheckedCreateInputSchema ]),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsCreateArgs>
 
 export const Youtube_llm_outputsUpsertArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsUpsertArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
@@ -2259,40 +2259,40 @@ export const Youtube_llm_outputsUpsertArgsSchema: z.ZodType<Prisma.Youtube_llm_o
   where: Youtube_llm_outputsWhereUniqueInputSchema,
   create: z.union([ Youtube_llm_outputsCreateInputSchema,Youtube_llm_outputsUncheckedCreateInputSchema ]),
   update: z.union([ Youtube_llm_outputsUpdateInputSchema,Youtube_llm_outputsUncheckedUpdateInputSchema ]),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsUpsertArgs>
 
 export const Youtube_llm_outputsCreateManyArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsCreateManyArgs> = z.object({
   data: Youtube_llm_outputsCreateManyInputSchema.array(),
   skipDuplicates: z.boolean().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsCreateManyArgs>
 
 export const Youtube_llm_outputsDeleteArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsDeleteArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
   include: Youtube_llm_outputsIncludeSchema.optional(),
   where: Youtube_llm_outputsWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsDeleteArgs>
 
 export const Youtube_llm_outputsUpdateArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsUpdateArgs> = z.object({
   select: Youtube_llm_outputsSelectSchema.optional(),
   include: Youtube_llm_outputsIncludeSchema.optional(),
   data: z.union([ Youtube_llm_outputsUpdateInputSchema,Youtube_llm_outputsUncheckedUpdateInputSchema ]),
   where: Youtube_llm_outputsWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsUpdateArgs>
 
 export const Youtube_llm_outputsUpdateManyArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsUpdateManyArgs> = z.object({
   data: z.union([ Youtube_llm_outputsUpdateManyMutationInputSchema,Youtube_llm_outputsUncheckedUpdateManyInputSchema ]),
   where: Youtube_llm_outputsWhereInputSchema.optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsUpdateManyArgs>
 
 export const Youtube_llm_outputsDeleteManyArgsSchema: z.ZodType<Prisma.Youtube_llm_outputsDeleteManyArgs> = z.object({
   where: Youtube_llm_outputsWhereInputSchema.optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_llm_outputsDeleteManyArgs>
 
 export const Youtube_videosCreateArgsSchema: z.ZodType<Prisma.Youtube_videosCreateArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
   include: Youtube_videosIncludeSchema.optional(),
   data: z.union([ Youtube_videosCreateInputSchema,Youtube_videosUncheckedCreateInputSchema ]),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosCreateArgs>
 
 export const Youtube_videosUpsertArgsSchema: z.ZodType<Prisma.Youtube_videosUpsertArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
@@ -2300,53 +2300,53 @@ export const Youtube_videosUpsertArgsSchema: z.ZodType<Prisma.Youtube_videosUpse
   where: Youtube_videosWhereUniqueInputSchema,
   create: z.union([ Youtube_videosCreateInputSchema,Youtube_videosUncheckedCreateInputSchema ]),
   update: z.union([ Youtube_videosUpdateInputSchema,Youtube_videosUncheckedUpdateInputSchema ]),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosUpsertArgs>
 
 export const Youtube_videosCreateManyArgsSchema: z.ZodType<Prisma.Youtube_videosCreateManyArgs> = z.object({
   data: Youtube_videosCreateManyInputSchema.array(),
   skipDuplicates: z.boolean().optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosCreateManyArgs>
 
 export const Youtube_videosDeleteArgsSchema: z.ZodType<Prisma.Youtube_videosDeleteArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
   include: Youtube_videosIncludeSchema.optional(),
   where: Youtube_videosWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosDeleteArgs>
 
 export const Youtube_videosUpdateArgsSchema: z.ZodType<Prisma.Youtube_videosUpdateArgs> = z.object({
   select: Youtube_videosSelectSchema.optional(),
   include: Youtube_videosIncludeSchema.optional(),
   data: z.union([ Youtube_videosUpdateInputSchema,Youtube_videosUncheckedUpdateInputSchema ]),
   where: Youtube_videosWhereUniqueInputSchema,
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosUpdateArgs>
 
 export const Youtube_videosUpdateManyArgsSchema: z.ZodType<Prisma.Youtube_videosUpdateManyArgs> = z.object({
   data: z.union([ Youtube_videosUpdateManyMutationInputSchema,Youtube_videosUncheckedUpdateManyInputSchema ]),
   where: Youtube_videosWhereInputSchema.optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosUpdateManyArgs>
 
 export const Youtube_videosDeleteManyArgsSchema: z.ZodType<Prisma.Youtube_videosDeleteManyArgs> = z.object({
   where: Youtube_videosWhereInputSchema.optional(),
-}).strict()
+}).strict() as z.ZodType<Prisma.Youtube_videosDeleteManyArgs>
 
 interface Trpc_callsGetPayload extends HKT {
   readonly _A?: boolean | null | undefined | Prisma.Trpc_callsArgs
-  readonly type: Prisma.Trpc_callsGetPayload<this['_A']>
+  readonly type: Omit<Prisma.Trpc_callsGetPayload<this['_A']>, "Please either choose `select` or `include`">
 }
 
 interface Youtube_basic_summaryGetPayload extends HKT {
   readonly _A?: boolean | null | undefined | Prisma.Youtube_basic_summaryArgs
-  readonly type: Prisma.Youtube_basic_summaryGetPayload<this['_A']>
+  readonly type: Omit<Prisma.Youtube_basic_summaryGetPayload<this['_A']>, "Please either choose `select` or `include`">
 }
 
 interface Youtube_llm_outputsGetPayload extends HKT {
   readonly _A?: boolean | null | undefined | Prisma.Youtube_llm_outputsArgs
-  readonly type: Prisma.Youtube_llm_outputsGetPayload<this['_A']>
+  readonly type: Omit<Prisma.Youtube_llm_outputsGetPayload<this['_A']>, "Please either choose `select` or `include`">
 }
 
 interface Youtube_videosGetPayload extends HKT {
   readonly _A?: boolean | null | undefined | Prisma.Youtube_videosArgs
-  readonly type: Prisma.Youtube_videosGetPayload<this['_A']>
+  readonly type: Omit<Prisma.Youtube_videosGetPayload<this['_A']>, "Please either choose `select` or `include`">
 }
 
 export const tableSchemas = {
@@ -2404,7 +2404,7 @@ export const tableSchemas = {
     deleteSchema: Trpc_callsDeleteArgsSchema,
     deleteManySchema: Trpc_callsDeleteManyArgsSchema
   } as TableSchema<
-    z.infer<typeof Trpc_callsCreateInputSchema>,
+    z.infer<typeof Trpc_callsUncheckedCreateInputSchema>,
     Prisma.Trpc_callsCreateArgs['data'],
     Prisma.Trpc_callsUpdateArgs['data'],
     Prisma.Trpc_callsFindFirstArgs['select'],
@@ -2450,7 +2450,7 @@ export const tableSchemas = {
     deleteSchema: Youtube_basic_summaryDeleteArgsSchema,
     deleteManySchema: Youtube_basic_summaryDeleteManyArgsSchema
   } as TableSchema<
-    z.infer<typeof Youtube_basic_summaryCreateInputSchema>,
+    z.infer<typeof Youtube_basic_summaryUncheckedCreateInputSchema>,
     Prisma.Youtube_basic_summaryCreateArgs['data'],
     Prisma.Youtube_basic_summaryUpdateArgs['data'],
     Prisma.Youtube_basic_summaryFindFirstArgs['select'],
@@ -2500,7 +2500,7 @@ export const tableSchemas = {
     deleteSchema: Youtube_llm_outputsDeleteArgsSchema,
     deleteManySchema: Youtube_llm_outputsDeleteManyArgsSchema
   } as TableSchema<
-    z.infer<typeof Youtube_llm_outputsCreateInputSchema>,
+    z.infer<typeof Youtube_llm_outputsUncheckedCreateInputSchema>,
     Prisma.Youtube_llm_outputsCreateArgs['data'],
     Prisma.Youtube_llm_outputsUpdateArgs['data'],
     Prisma.Youtube_llm_outputsFindFirstArgs['select'],
@@ -2607,7 +2607,7 @@ export const tableSchemas = {
     deleteSchema: Youtube_videosDeleteArgsSchema,
     deleteManySchema: Youtube_videosDeleteManyArgsSchema
   } as TableSchema<
-    z.infer<typeof Youtube_videosCreateInputSchema>,
+    z.infer<typeof Youtube_videosUncheckedCreateInputSchema>,
     Prisma.Youtube_videosCreateArgs['data'],
     Prisma.Youtube_videosUpdateArgs['data'],
     Prisma.Youtube_videosFindFirstArgs['select'],

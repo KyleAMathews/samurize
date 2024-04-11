@@ -6953,3 +6953,5 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
    */
   export const dmmf: runtime.BaseDMMF
 }
+
+type Buffer = Omit<Uint8Array, 'set'>

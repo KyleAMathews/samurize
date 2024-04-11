@@ -67,6 +67,7 @@ export const appRouter = router({
               ...metadata,
             },
           })
+          console.log(video)
           const transcript = await YoutubeTranscript.fetchTranscript(input.id)
           video = await db.youtube_videos.update({
             data: {

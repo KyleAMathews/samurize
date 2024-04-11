@@ -29,49 +29,50 @@ export function useCreateYoutubeVideo() {
     span.setAttribute(`youtubeId`, id || ``)
     let videoExists
     if (id) {
-      // Check if the video exists.
-      videoExists = await db.youtube_videos.findUnique({ where: { id } })
-      span.setAttribute(`videoExists`, !!videoExists)
-      if (videoExists === null) {
-        const url = import.meta.env.PROD
-          ? `https://ykiefi3x29.execute-api.us-east-1.amazonaws.com/`
-          : `https://eyygvkenl2.execute-api.us-east-1.amazonaws.com/`
-        await tracer.startActiveSpan(
-          `trpc.createVideo`,
-          {},
-          ctx,
-          async (span) => {
-            fetch(`${url}?videoId=${id}`).then(async (response) => {
-              console.log({ response })
-              if (!response.ok) {
-                const error = await response.text()
-                console.log({ error })
-                span.recordException(error)
-                db.youtube_videos.upsert({
-                  create: {
-                    id,
-                    error: error,
-                    updated_at: new Date(),
-                  },
-                  update: {
-                    error: error,
-                    updated_at: new Date(),
-                  },
-                  where: {
-                    id,
-                  },
-                })
+      const url = import.meta.env.PROD
+        ? `https://ykiefi3x29.execute-api.us-east-1.amazonaws.com/`
+        : `https://eyygvkenl2.execute-api.us-east-1.amazonaws.com/`
+      await tracer.startActiveSpan(
+        `trpc.createVideo`,
+        {},
+        ctx,
+        async (span) => {
+          db.youtube_videos.sync({ where: { id } })
+          fetch(`${url}?videoId=${id}`).then(async (response) => {
+            console.log({ response, status: response.status })
+            if (response.status === 409) {
+              videoExists = true
+              return
+            } else if (!response.ok) {
+              const error = await response.text()
+              console.log({ error })
+              span.recordException(error)
+              db.youtube_videos.upsert({
+                create: {
+                  id,
+                  error: error,
+                  updated_at: new Date(),
+                },
+                update: {
+                  error: error,
+                  updated_at: new Date(),
+                },
+                where: {
+                  id,
+                },
+              })
 
-                span.end()
-                setErrorMessage(error)
-                setLoading(false)
-              }
-            })
-            await videoTitleToExist({ db, id })
-            span.end()
-          }
-        )
-      }
+              span.end()
+              setErrorMessage(error)
+              setLoading(false)
+            }
+          })
+          console.log(`awaiting for video to be created`)
+          await videoTitleToExist({ db, id })
+          console.log(`got it`)
+          span.end()
+        }
+      )
     } else {
       throw new Error(`Not a valid YouTube URL`)
     }

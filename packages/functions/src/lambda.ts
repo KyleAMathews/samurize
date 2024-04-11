@@ -1,6 +1,6 @@
 import { ApiHandler } from "sst/node/api"
 import { Config } from "sst/node/config"
-import { YoutubeTranscript } from "youtube-transcript"
+import { YoutubeTranscript } from "./youtube-transcripts"
 const youtube = require(`youtube-metadata-from-url`)
 const { Client } = require(`pg`)
 import { chunk } from "../../../src/utils/chunk-transcript"
@@ -27,7 +27,6 @@ export const handler = ApiHandler(async (_evt) => {
   )
   console.log({ rows })
   if (!rows[0]) {
-    // if (true) {
     try {
       const metadataPromise = youtube
         .metadata(`https://www.youtube.com/watch?v=${videoId}`)
@@ -86,6 +85,7 @@ export const handler = ApiHandler(async (_evt) => {
         })
         .then(() => console.log(`original insert to youtube_videos is done`))
 
+      console.log(`trying to get transcript`, { videoId })
       const transcript = await YoutubeTranscript.fetchTranscript(videoId)
 
       await Promise.resolve(metadataPromise)
@@ -200,10 +200,14 @@ export const handler = ApiHandler(async (_evt) => {
         body: e.message,
       }
     }
-  }
-
-  return {
-    statusCode: 200,
-    body: `done`,
+    return {
+      statusCode: 200,
+      body: `done`,
+    }
+  } else {
+    return {
+      statusCode: 409,
+      body: `video already processed`,
+    }
   }
 })
