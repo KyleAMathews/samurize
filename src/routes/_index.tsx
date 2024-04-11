@@ -14,6 +14,7 @@ import { context } from "@opentelemetry/api"
 export default function Index() {
   const createVideo = useCreateYoutubeVideo()
   const navigate = useNavigate()
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
 
