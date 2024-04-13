@@ -5856,10 +5856,10 @@ electric-query@^0.0.14:
     browser-tab-id "^0.0.8"
     page-lifecycle "^0.1.2"
 
-electric-sql@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/electric-sql/-/electric-sql-0.10.0.tgz#942306302ea73f228e9ebac3454bccabf0020a01"
-  integrity sha512-u6Y1hU0adOO2PXWYJiwPKTCs7/Ksdt1/kSwioMWpLKwD5X87IMVZg27/+QwyYFC9znL+bk/rbses3axHJ8aZeg==
+electric-sql@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/electric-sql/-/electric-sql-0.10.1.tgz#ea2202f045e81dbf12eba0a8aa1c27aa2aa70f5e"
+  integrity sha512-k/Ctsw7fXV75nao5E5e77Kg0RkLbYN5YgMSNQRGPYdWp5VWX6RnhwQrMm12qhteMFTDNjeVXJD3L/ArHFyWBVw==
   dependencies:
     "@electric-sql/prisma-generator" "1.1.4"
     "@prisma/client" "4.8.1"
@@ -5883,6 +5883,7 @@ electric-sql@^0.10.0:
     lodash.partition "^4.6.0"
     lodash.pick "^4.4.0"
     lodash.throttle "^4.1.1"
+    lodash.uniqwith "^4.5.0"
     loglevel "^1.8.1"
     long "^5.2.0"
     object.hasown "^1.1.2"
@@ -8161,6 +8162,11 @@ lodash.union@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.union/-/lodash.union-4.6.0.tgz#48bb5088409f16f1821666641c44dd1aaae3cd88"
   integrity sha512-c4pB2CdGrGdjMKYLA+XiRDO7Y0PRQbm/Gzg8qMj+QH+pFVAoTp5sBpO0odL3FjoPCGjK96p6qsP+yQoiLoOBcw==
+
+lodash.uniqwith@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.uniqwith/-/lodash.uniqwith-4.5.0.tgz#7a0cbf65f43b5928625a9d4d0dc54b18cadc7ef3"
+  integrity sha512-7lYL8bLopMoy4CTICbxygAUq6CdRJ36vFc80DucPueUee+d5NBRxz3FdT9Pes/HEx5mPoT9jwnsEJWz1N7uq7Q==
 
 lodash@^4.13.1, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4:
   version "4.17.21"
@@ -11610,6 +11616,7 @@ widest-line@^4.0.1:
     string-width "^5.0.1"
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
